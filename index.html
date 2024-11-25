@@ -28,14 +28,20 @@
     }
     .video-row {
       display: flex; /* 플렉스 컨테이너로 설정 */
-      justify-content: center; /* 두 비디오를 가운데 정렬 */
+      justify-content: space-evenly; /* 균일한 여백 배분 */
       align-items: center; /* 수직 정렬 */
-      gap: 20px; /* 비디오 간 간격 */
+      gap: 10px; /* 두 비디오 사이 간격 줄이기 */
+      padding: 0 20px; /* 전체 여백 균일화 */
     }
     
     .video-container video {
       max-width: 100%; /* 비디오 크기 조정 */
       border-radius: 10px; /* 비디오 모서리 둥글게 */
+    }
+    
+    .container {
+      max-width: 1200px; /* 컨테이너 최대 크기 설정 */
+      margin: 0 auto; /* 페이지 중앙 정렬 */
     }
 
     .caption {
