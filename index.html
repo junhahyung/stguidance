@@ -28,11 +28,11 @@
     }
     .video-container video {
       display: block;
-      margin: 0 auto;
+      margin: 0;
       border-radius: 10px; 
     }
     .video-row {
-      gap: 1px; /* 두 비디오 사이 간격 */
+      gap: 5px; /* 두 비디오 사이 간격 */
     }
     .caption {
       margin-top: 20px; /* Space between videos and caption */
@@ -160,10 +160,10 @@
         We introduce Spatiotemporal Skip Guidance (STG), a simple training-free sampling guidance method for enhancing transformer-based video diffusion models.
         STG employs an implicit weak model via self-perturbation, avoiding the need for external models or additional training. 
         By selectively skipping spatiotemporal layers, STG produces an aligned, degraded version of the original model to boost sample quality without compromising diversity or dynamic degree. 
-        Our contributions include:
+        Our contributions include:<br>
       </p>
-      <strong>(1) introducing STG as an efficient, high-performing guidance technique for video diffusion models</strong>
-      <strong>(2) Eliminating the need for auxiliary models by simulating a weak model through layer skipping</strong>
+      <strong>(1) introducing STG as an efficient, high-performing guidance technique for video diffusion models</strong><br>
+      <strong>(2) Eliminating the need for auxiliary models by simulating a weak model through layer skipping</strong><br>
       <strong>(3) Ensuring quality-enhanced guidance without compromising sample diversity or dynamics unlike CFG.</strong>
     </div>
   </div>
