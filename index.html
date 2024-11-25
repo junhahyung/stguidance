@@ -48,28 +48,26 @@
       text-align: center;
       color: #555;
     }
-    .video-selector {
+    .carousel {
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 20px;
+      padding: 20px 0;
     }
-    .circle {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #555;
-      border-radius: 50%;
-      cursor: pointer;
-      background-color: #ddd;
-      transition: background-color 0.3s, transform 0.2s;
+    .carousel .item {
+      scroll-snap-align: center;
+      flex: 0 0 auto;
+      width: 800px;
+      max-width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
-    .circle:hover {
-      background-color: #555;
-      transform: scale(1.2);
-    }
-    .circle.active {
-      background-color: #333;
-      border-color: #333;
+    .carousel video {
+      display: block;
+      width: 100%;
+      height: auto;
     }
   </style>
 </head>
@@ -179,21 +177,55 @@
 
 <section class="section">
   <div class="container">
-    <div class="video-wrapper" style="text-align: center;">
-      <video id="main-video" autoplay muted loop playsinline width="800">
-        <source src="assets/circle/sample1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-    <div class="video-selector">
-      <span class="circle" data-video="assets/circle/sample1.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample2.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample3.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample4.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample5.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample6.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample7.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample8.mp4"></span>
+    <div id="results-carousel" class="carousel results-carousel">
+      <div class="item">
+        <video id="sample1" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample1.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample2" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample2.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample3" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample3.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample4" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample4.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample5" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample5.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample6" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample6.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample7" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample7.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample8" autoplay muted loop playsinline width="800">
+          <source src="assets/circle/sample8.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
     </div>
   </div>
 </section>
@@ -222,23 +254,35 @@
 </footer>
 
 <script>
+  // Optional drag-to-scroll functionality
   document.addEventListener("DOMContentLoaded", () => {
-    const videoSelector = document.querySelectorAll(".circle");
-    const mainVideo = document.getElementById("main-video");
+    const carousel = document.getElementById("results-carousel");
 
-    videoSelector.forEach((circle) => {
-      circle.addEventListener("click", (e) => {
-        const videoSource = e.target.getAttribute("data-video");
-        mainVideo.src = videoSource;
-        mainVideo.load();
-        mainVideo.play();
+    let isDown = false;
+    let startX;
+    let scrollLeft;
 
-        videoSelector.forEach((item) => item.classList.remove("active"));
-        e.target.classList.add("active");
-      });
+    carousel.addEventListener("mousedown", (e) => {
+      isDown = true;
+      startX = e.pageX - carousel.offsetLeft;
+      scrollLeft = carousel.scrollLeft;
     });
 
-    videoSelector[0].classList.add("active");
+    carousel.addEventListener("mouseleave", () => {
+      isDown = false;
+    });
+
+    carousel.addEventListener("mouseup", () => {
+      isDown = false;
+    });
+
+    carousel.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - carousel.offsetLeft;
+      const walk = (x - startX) * 2; // Scroll speed
+      carousel.scrollLeft = scrollLeft - walk;
+    });
   });
 </script>
 
