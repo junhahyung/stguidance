@@ -52,7 +52,7 @@
     }
     .carousel .item {
       flex: 0 0 auto;
-      width: 400px; /* Half size */
+      width: 600px; /* Half size */
       max-width: 100%;
       border-radius: 10px;
       overflow: hidden;
@@ -82,6 +82,31 @@
     }
     .pagination-dots .dot:hover {
       background: #555;
+    }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .arrow.left {
+      left: 10px;
+    }
+    .arrow.right {
+      right: 10px;
+    }
+    .arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
     }
   </style>
 </head>
@@ -188,51 +213,59 @@
     </p>
   </div>
 </section>
+
+
+<div class="carousel-wrapper">
+  <button class="arrow left">&#8249;</button>
+  <div class="carousel">
   
 <section class="section">
   <div class="container">
-    <div class="carousel">
-      <div class="item">
-        <video id="sample1" autoplay muted loop playsinline>
-          <source src="assets/circle/sample1.mp4" type="video/mp4">
-        </video>
+    <div class="carousel-wrapper">
+      <button class="arrow left">&#8249;</button>
+      <div class="carousel">
+        <div class="item">
+          <video id="sample1" autoplay muted loop playsinline>
+            <source src="assets/circle/sample1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample2" autoplay muted loop playsinline>
+            <source src="assets/circle/sample2.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample3" autoplay muted loop playsinline>
+            <source src="assets/circle/sample3.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample4" autoplay muted loop playsinline>
+            <source src="assets/circle/sample4.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample5" autoplay muted loop playsinline>
+            <source src="assets/circle/sample5.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample6" autoplay muted loop playsinline>
+            <source src="assets/circle/sample6.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample7" autoplay muted loop playsinline>
+            <source src="assets/circle/sample7.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample8" autoplay muted loop playsinline>
+            <source src="assets/circle/sample8.mp4" type="video/mp4">
+          </video>
+        </div>  
       </div>
-      <div class="item">
-        <video id="sample2" autoplay muted loop playsinline>
-          <source src="assets/circle/sample2.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="item">
-        <video id="sample3" autoplay muted loop playsinline>
-          <source src="assets/circle/sample3.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="item">
-        <video id="sample4" autoplay muted loop playsinline>
-          <source src="assets/circle/sample4.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="item">
-        <video id="sample5" autoplay muted loop playsinline>
-          <source src="assets/circle/sample5.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="item">
-        <video id="sample6" autoplay muted loop playsinline>
-          <source src="assets/circle/sample6.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="item">
-        <video id="sample7" autoplay muted loop playsinline>
-          <source src="assets/circle/sample7.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="item">
-        <video id="sample8" autoplay muted loop playsinline>
-          <source src="assets/circle/sample8.mp4" type="video/mp4">
-        </video>
-      </div>
-    </div>
+      <button class="arrow right">&#8250;</button>
     <div class="pagination-dots">
       <span class="dot active" data-index="0"></span>
       <span class="dot" data-index="1"></span>
@@ -273,19 +306,38 @@
   document.addEventListener("DOMContentLoaded", () => {
     const carousel = document.querySelector(".carousel");
     const dots = document.querySelectorAll(".pagination-dots .dot");
+    const items = carousel.querySelectorAll(".item");
+    const leftArrow = document.querySelector(".arrow.left");
+    const rightArrow = document.querySelector(".arrow.right");
+    let currentIndex = 0;
+
+    function updateCarousel(index) {
+      items.forEach((item, i) => {
+        item.style.display = i === index ? "block" : "none";
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+      });
+    }
 
     dots.forEach((dot, index) => {
       dot.addEventListener("click", () => {
-        const items = carousel.querySelectorAll(".item");
-        items.forEach((item) => (item.style.display = "none"));
-        items[index].style.display = "block";
-
-        dots.forEach((d) => d.classList.remove("active"));
-        dot.classList.add("active");
+        currentIndex = index;
+        updateCarousel(currentIndex);
       });
     });
 
-    dots[0].click(); // Default to the first video
+    leftArrow.addEventListener("click", () => {
+      currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
+      updateCarousel(currentIndex);
+    });
+
+    rightArrow.addEventListener("click", () => {
+      currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
+      updateCarousel(currentIndex);
+    });
+
+    updateCarousel(currentIndex);
   });
 </script>
 
