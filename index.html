@@ -32,7 +32,7 @@
       border-radius: 10px; 
     }
     .video-row {
-      gap: 5px; /* 두 비디오 사이 간격 */
+      gap: 1px; /* 두 비디오 사이 간격 */
     }
     .caption {
       margin-top: 20px; /* Space between videos and caption */
@@ -133,13 +133,13 @@
   <div class="container">
     <div class="columns video-row is-centered">
       <div class="column is-half video-container">
-        <video autoplay muted loop playsinline width="600">
+        <video autoplay muted loop playsinline width="500">
           <source src="assets/mochi_butterfly.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
       <div class="column is-half video-container">
-        <video autoplay muted loop playsinline width="600">
+        <video autoplay muted loop playsinline width="500">
           <source src="assets/mochi_paint.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -162,9 +162,9 @@
         By selectively skipping spatiotemporal layers, STG produces an aligned, degraded version of the original model to boost sample quality without compromising diversity or dynamic degree. 
         Our contributions include:
       </p>
-      <span class="indented"><strong>(1)</strong> introducing STG as an efficient, high-performing guidance technique for video diffusion models</span>
-      <span class="indented"><strong>(2)</strong> eliminating the need for auxiliary models by simulating a weak model through layer skipping</span>
-      <span class="indented"><strong>(3)</strong> ensuring quality-enhanced guidance without compromising sample diversity or dynamics unlike CFG.</span>
+      <strong>(1) introducing STG as an efficient, high-performing guidance technique for video diffusion models</strong>
+      <strong>(2) Eliminating the need for auxiliary models by simulating a weak model through layer skipping</strong>
+      <strong>(3) Ensuring quality-enhanced guidance without compromising sample diversity or dynamics unlike CFG.</strong>
     </div>
   </div>
 </section>
