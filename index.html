@@ -84,12 +84,14 @@
       background: #555;
     }
     .carousel-wrapper {
-      position: relative; /* 화살표 버튼 위치 계산을 위해 relative로 설정 */
-      display: inline-block; /* 동영상 크기에 맞게 줄어듦 */
+      position: relative; /* 화살표 버튼 위치를 설정하기 위해 relative */
+      display: flex; /* 버튼과 동영상을 가로로 정렬 */
+      justify-content: center; /* 전체를 화면 가운데로 정렬 */
+      align-items: center; /* 버튼과 동영상 세로 정렬 */
     }
     
     .arrow {
-      position: absolute; /* 부모 요소인 wrapper 기준으로 위치 설정 */
+      position: absolute; /* 부모 요소를 기준으로 버튼 위치 설정 */
       top: 50%;
       transform: translateY(-50%);
       background: rgba(0, 0, 0, 0.5);
@@ -106,16 +108,17 @@
     }
     
     .arrow.left {
-      left: -20px; /* 동영상 왼쪽에 딱 붙도록 설정 */
+      left: -50px; /* 동영상 왼쪽에서 약간 떨어진 위치 */
     }
     
     .arrow.right {
-      right: -20px; /* 동영상 오른쪽에 딱 붙도록 설정 */
+      right: -50px; /* 동영상 오른쪽에서 약간 떨어진 위치 */
     }
     
     .carousel .item {
-      position: relative; /* 화살표가 동영상 위에 위치하도록 설정 */
-      overflow: hidden; /* 불필요한 내용 숨김 */
+      display: flex;
+      justify-content: center; /* 동영상을 가운데 정렬 */
+      align-items: center;
     }
   </style>
 </head>
