@@ -83,6 +83,13 @@
     .pagination-dots .dot:hover {
       background: #555;
     }
+    .carousel-wrapper {
+      position: relative; /* 부모 요소에 relative 설정 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
     .arrow {
       position: absolute;
       top: 50%;
@@ -99,12 +106,15 @@
       justify-content: center;
       z-index: 10;
     }
+    
     .arrow.left {
-      left: 10px;
+      left: -50px; /* 동영상 왼쪽 가까이 배치 */
     }
+    
     .arrow.right {
-      right: 10px;
+      right: -50px; /* 동영상 오른쪽 가까이 배치 */
     }
+    
     .arrow:hover {
       background: rgba(0, 0, 0, 0.8);
     }
@@ -216,7 +226,7 @@
 
 <section class="section">
   <div class="container">
-    <div class="carousel-wrapper" style="position: relative;">
+    <div class="carousel-wrapper">
       <button class="arrow left">&#8249;</button>
       <div class="carousel">
         <div class="item">
@@ -244,6 +254,21 @@
             <source src="assets/circle/sample5.mp4" type="video/mp4">
           </video>
         </div>
+        <div class="item">
+          <video id="sample5" autoplay muted loop playsinline>
+            <source src="assets/circle/sample6.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample5" autoplay muted loop playsinline>
+            <source src="assets/circle/sample7.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="sample5" autoplay muted loop playsinline>
+            <source src="assets/circle/sample8.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
       <button class="arrow right">&#8250;</button>
     </div>
@@ -253,6 +278,9 @@
       <span class="dot" data-index="2"></span>
       <span class="dot" data-index="3"></span>
       <span class="dot" data-index="4"></span>
+      <span class="dot" data-index="5"></span>
+      <span class="dot" data-index="6"></span>
+      <span class="dot" data-index="7"></span>
     </div>
   </div>
 </section>
