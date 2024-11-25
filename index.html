@@ -31,6 +31,16 @@
       margin: 0 auto;
       border-radius: 10px; 
     }
+    .columns.is-centered {
+      gap: 40px; /* Two video spacing */
+    }
+    .caption {
+      margin-top: 20px; /* Space between videos and caption */
+      font-size: 1.1rem; /* Caption font size */
+      font-style: italic; /* Italic style */
+      text-align: center; /* Center-align text */
+      color: #555; /* Caption color */
+    }
   </style>
 </head>
 <body>
@@ -116,7 +126,6 @@
 
 <section class="section">
   <div class="container">
-    <h2 class="title is-3 has-text-centered">Sample Videos</h2>
     <div class="columns is-centered">
       <div class="column is-half video-container">
         <video autoplay muted loop playsinline width="600">
@@ -131,6 +140,10 @@
         </video>
       </div>
     </div>
+    <!-- Central Caption -->
+    <p class="caption">
+      STG provides specialized guidance for video generation models, demonstrating superior generation quality compared to CFG.
+    </p>
   </div>
 </section>
 
@@ -138,10 +151,12 @@
   <div class="container">
     <h2 class="title is-3 has-text-centered">Abstract</h2>
     <div class="abstract-container">
-      <p class="content has-text-justified">
-        We introduce <strong>Spatiotemporal Skip Guidance (STG)</strong>, a simple training-free sampling guidance method for enhancing transformer-based video diffusion models. STG employs an implicit weak model via self-perturbation, avoiding the need for external models or additional training. By selectively skipping spatiotemporal layers, STG produces an aligned, degraded version of the original model to boost sample quality without compromising diversity or dynamic degree. <br><br>
-        Our contributions include: <strong>(1) introducing STG as an efficient, high-performing guidance technique for video diffusion models, (2) eliminating the need for auxiliary models by simulating a weak model through layer skipping, and (3) ensuring quality-enhanced guidance without compromising sample diversity or dynamics unlike CFG.</strong>
-      </p>
+    <p class="content has-text-justified">
+      Our contributions include:<br>
+      <strong>(1) introducing STG as an efficient, high-performing guidance technique for video diffusion models<br></strong>
+      <strong>(2) eliminating the need for auxiliary models by simulating a weak model through layer skipping<br></strong>
+      <strong>(3) ensuring quality-enhanced guidance without compromising sample diversity or dynamics unlike CFG.</strong>
+    </p>
     </div>
   </div>
 </section>
