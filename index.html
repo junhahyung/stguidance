@@ -16,14 +16,10 @@
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/linear.svg">
 
-  <!-- JS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-
   <style>
     .abstract-container {
       max-width: 800px;
-      margin: 0 auto; 
+      margin: 0 auto;
       padding: 20px;
     }
     .video-row {
@@ -48,33 +44,49 @@
       text-align: center;
       color: #555;
     }
-    .video-selector {
+    .carousel {
       display: flex;
       justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .carousel .item {
+      flex: 0 0 auto;
+      width: 400px; /* Half size */
+      max-width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .carousel video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .pagination-dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
       gap: 10px;
-      margin-top: 20px;
     }
-    .circle {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #555;
+    .pagination-dots .dot {
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
+      background: #ccc;
       cursor: pointer;
-      background-color: #ddd;
-      transition: background-color 0.3s, transform 0.2s;
+      transition: background 0.3s;
     }
-    .circle:hover {
-      background-color: #555;
-      transform: scale(1.2);
+    .pagination-dots .dot.active {
+      background: #333;
     }
-    .circle.active {
-      background-color: #333;
-      border-color: #333;
+    .pagination-dots .dot:hover {
+      background: #555;
     }
   </style>
 </head>
 <body>
-  
+
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -156,45 +168,57 @@
 
 <section class="section">
   <div class="container">
-    <!-- 두 비디오 나란히 -->
-    <div class="video-row">
-      <div class="video-container">
-        <video autoplay muted loop playsinline width="500">
-          <source src="assets/mochi_butterfly.mp4" type="video/mp4">
-          Your browser does not support the video tag.
+    <div class="carousel">
+      <div class="item">
+        <video id="sample1" autoplay muted loop playsinline>
+          <source src="assets/circle/sample1.mp4" type="video/mp4">
         </video>
       </div>
-      <div class="video-container">
-        <video autoplay muted loop playsinline width="500">
-          <source src="assets/mochi_paint.mp4" type="video/mp4">
-          Your browser does not support the video tag.
+      <div class="item">
+        <video id="sample2" autoplay muted loop playsinline>
+          <source src="assets/circle/sample2.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample3" autoplay muted loop playsinline>
+          <source src="assets/circle/sample3.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample4" autoplay muted loop playsinline>
+          <source src="assets/circle/sample4.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample5" autoplay muted loop playsinline>
+          <source src="assets/circle/sample5.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample6" autoplay muted loop playsinline>
+          <source src="assets/circle/sample6.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample7" autoplay muted loop playsinline>
+          <source src="assets/circle/sample7.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="sample8" autoplay muted loop playsinline>
+          <source src="assets/circle/sample8.mp4" type="video/mp4">
         </video>
       </div>
     </div>
-    <p class="caption">
-      STG provides specialized guidance for video generation models, demonstrating superior generation quality compared to CFG.
-    </p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <!-- Main video with selector -->
-    <div class="video-wrapper" style="text-align: center;">
-      <video id="main-video" autoplay muted loop playsinline width="800">
-        <source src="assets/circle/sample1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-    <div class="video-selector">
-      <span class="circle" data-video="assets/circle/sample1.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample2.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample3.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample4.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample5.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample6.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample7.mp4"></span>
-      <span class="circle" data-video="assets/circle/sample8.mp4"></span>
+    <div class="pagination-dots">
+      <span class="dot active" data-index="0"></span>
+      <span class="dot" data-index="1"></span>
+      <span class="dot" data-index="2"></span>
+      <span class="dot" data-index="3"></span>
+      <span class="dot" data-index="4"></span>
+      <span class="dot" data-index="5"></span>
+      <span class="dot" data-index="6"></span>
+      <span class="dot" data-index="7"></span>
     </div>
   </div>
 </section>
@@ -224,22 +248,21 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const videoSelector = document.querySelectorAll(".circle");
-    const mainVideo = document.getElementById("main-video");
+    const carousel = document.querySelector(".carousel");
+    const dots = document.querySelectorAll(".pagination-dots .dot");
 
-    videoSelector.forEach((circle) => {
-      circle.addEventListener("click", (e) => {
-        const videoSource = e.target.getAttribute("data-video");
-        mainVideo.src = videoSource;
-        mainVideo.load();
-        mainVideo.play();
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        const items = carousel.querySelectorAll(".item");
+        items.forEach((item) => (item.style.display = "none"));
+        items[index].style.display = "block";
 
-        videoSelector.forEach((item) => item.classList.remove("active"));
-        e.target.classList.add("active");
+        dots.forEach((d) => d.classList.remove("active"));
+        dot.classList.add("active");
       });
     });
 
-    videoSelector[0].classList.add("active"); // Default to the first video
+    dots[0].click(); // Default to the first video
   });
 </script>
 
