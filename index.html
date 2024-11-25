@@ -26,14 +26,18 @@
       margin: 0 auto; 
       padding: 20px;
     }
-    .video-container video {
-      display: block;
-      margin: 0;
-      border-radius: 10px; 
-    }
     .video-row {
-      gap: 5px; /* 두 비디오 사이 간격 */
+      display: flex; /* 플렉스 컨테이너로 설정 */
+      justify-content: center; /* 두 비디오를 가운데 정렬 */
+      align-items: center; /* 수직 정렬 */
+      gap: 20px; /* 비디오 간 간격 */
     }
+    
+    .video-container video {
+      max-width: 100%; /* 비디오 크기 조정 */
+      border-radius: 10px; /* 비디오 모서리 둥글게 */
+    }
+
     .caption {
       margin-top: 20px; /* Space between videos and caption */
       font-size: 1.1rem; /* Caption font size */
@@ -131,26 +135,28 @@
 
 <section class="section">
   <div class="container">
-    <div class="columns video-row is-centered">
-      <div class="column is-half video-container">
+    <!-- Flexbox를 활용해 비디오를 나란히 배치 -->
+    <div class="video-row">
+      <div class="video-container">
         <video autoplay muted loop playsinline width="500">
           <source src="assets/mochi_butterfly.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
-      <div class="column is-half video-container">
+      <div class="video-container">
         <video autoplay muted loop playsinline width="500">
           <source src="assets/mochi_paint.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
     </div>
-    <!-- Central Caption -->
+    <!-- 중앙 캡션 -->
     <p class="caption">
       STG provides specialized guidance for video generation models, demonstrating superior generation quality compared to CFG.
     </p>
   </div>
 </section>
+
 
 <section class="section">
   <div class="container">
