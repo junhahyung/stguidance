@@ -96,26 +96,28 @@
   
 <section class="hero hero-background-video" style="height: 100vh;">
   <style>
+    /* 비디오 섹션 전체 설정 */
     .hero-background-video {
-      height: 100vh !important; /* 섹션 높이를 뷰포트 높이로 설정 */
+      height: 100vh !important; /* 섹션의 높이를 뷰포트와 일치 */
       display: flex; /* Flexbox 사용 */
       justify-content: center; /* 가로 중앙 정렬 */
       align-items: center; /* 세로 중앙 정렬 */
-      position: relative;
+      position: relative; /* 위치 조정 */
     }
 
+    /* 텍스트 설정 */
     .hero-background-video .hero-body {
-      text-align: center; /* 텍스트 중앙 정렬 */
-      color: white !important; /* 텍스트 흰색 */
+      text-align: center; /* 텍스트 가로 중앙 정렬 */
+      color: white !important; /* 텍스트 색상 흰색 */
       z-index: 1; /* 텍스트를 비디오 위에 배치 */
     }
 
     .hero-background-video .publication-title {
-      color: white !important; /* 제목 텍스트 흰색 */
+      color: white !important; /* 제목 텍스트 색상 흰색 */
     }
 
     .hero-background-video a {
-      color: white !important; /* 링크 텍스트 흰색 */
+      color: white !important; /* 링크 텍스트 색상 흰색 */
       text-decoration: none;
     }
 
@@ -123,14 +125,15 @@
       color: lightgray !important; /* 링크 호버 색상 */
     }
 
+    /* 비디오 설정 */
     .hero-background-video video {
       position: absolute; /* 비디오를 절대 위치로 설정 */
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%); /* 비디오를 섹션 중앙에 배치 */
-      width: 100vw; /* 비디오 너비를 뷰포트 전체로 설정 */
-      height: 100vh; /* 비디오 높이를 뷰포트 전체로 설정 */
-      object-fit: cover; /* 비디오를 화면에 맞게 채우기 */
+      transform: translate(-50%, -50%); /* 비디오를 섹션 중앙에 위치 */
+      width: 100%; /* 비디오의 가로 크기를 섹션에 맞춤 */
+      height: 100%; /* 비디오의 세로 크기를 섹션에 맞춤 */
+      object-fit: cover; /* 비디오를 섹션 크기에 맞게 채움 */
       z-index: -1; /* 비디오를 텍스트 뒤로 배치 */
       opacity: 0.7; /* 비디오 투명도 설정 */
     }
@@ -167,6 +170,7 @@
     </div>
   </div>
 </section>
+
 
 
 
