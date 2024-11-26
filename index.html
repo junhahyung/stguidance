@@ -97,13 +97,16 @@
 <section class="hero hero-background-video">
   <style>
     .hero-background-video .hero-body {
-      color: white;
+      color: white !important; /* 모든 텍스트를 흰색으로 강제 변경 */
     }
+  
     .hero-background-video a {
-      color: white;
+      color: white !important; /* 링크 텍스트도 흰색으로 강제 변경 */
+      text-decoration: none; /* 선택적으로 밑줄 제거 */
     }
+  
     .hero-background-video a:hover {
-      color: lightgray;
+      color: lightgray !important; /* 링크 호버 색상 */
     }
   </style>
   <!-- 배경 비디오 추가 -->
