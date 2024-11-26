@@ -56,30 +56,40 @@
       text-align: center;
       color: #555;
     }
+    .hero {
+    position: relative;
+    overflow: hidden; /* 비디오가 섹션을 넘어가지 않도록 설정 */
+    color: white; /* 텍스트가 비디오 위에서 잘 보이도록 설정 */
+    }
+  
+    .hero video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1; /* 비디오를 텍스트 뒤로 보내기 */
+      opacity: 0.7; /* 비디오를 살짝 투명하게 설정 */
+    }
+  
+    .hero-body {
+      position: relative;
+      z-index: 1; /* 텍스트를 비디오 위로 올리기 */
+    }
   </style>
 </head>
 <body>
-
-<section class="hero is-medium is-primary is-bold" style="position: relative; overflow: hidden;">
-  <!-- 배경 비디오 -->
-  <video autoplay muted loop playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
+  
+<section class="hero">
+  <!-- 배경 비디오 추가 -->
+  <video autoplay muted loop playsinline>
     <source src="assets/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <div class="hero-body">
-    <div class="container has-text-centered">
-      <h1 class="title is-1" style="color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
-        Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling
-      </h1>
-      <p class="subtitle" style="color: white; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);">
-        Create high-quality videos without compromising diversity or motion dynamics
-      </p>
-    </div>
-  </div>
-</section>
-  
-<section class="hero">
   <div class="hero-body">
     <div class="custom-container is-max-desktop">
       <div class="columns is-centered">
