@@ -45,7 +45,7 @@
       max-width: 100%;
       border-radius: 10px;
     }
-    .container {
+    .custom-container {
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -55,20 +55,6 @@
       font-style: italic;
       text-align: center;
       color: #555;
-    }
-    .carousel video {
-      max-width: 80%; /* 동영상 최대 너비 */
-      max-height: 750px; /* 동영상 최대 높이 */
-      width: auto; /* 자동 비율 유지 */
-      height: auto; /* 자동 비율 유지 */
-      margin: 0 auto; /* 동영상 중앙 정렬 */
-    }
-
-    /* 캐러셀 내 컨텐츠 정렬 */
-    .carousel .item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
   </style>
 </head>
@@ -96,7 +82,7 @@
 
 <section class="hero">
   <div class="hero-body">
-    <div class="container is-max-desktop">
+    <div class="custom-container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling</h1>
@@ -154,7 +140,7 @@
 </section>
 
 <section class="section">
-  <div class="container">
+  <div class="custom-container">
     <!-- 두 비디오 나란히 -->
     <div class="video-row">
       <div class="video-container">
@@ -176,48 +162,43 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
       <div id="results-carousel" class="carousel results-carousel">
         <div class="item item-sample1">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample1" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample1.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample2">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample2" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample2.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample3">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample3" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample3.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample4">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample4" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample4.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample5">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample5" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample5.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample6">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample6" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample6.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample7">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample7" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample7.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-sample8">
-          <video autoplay controls muted loop playsinline height="100%">
-            <source src="assets/circle/sample8.mp4" type="video/mp4">
           </video>
         </div>
       </div>
@@ -226,7 +207,7 @@
 </section>
 
 <section class="section">
-  <div class="container">
+  <div class="custom-container">
     <h2 class="title is-3 has-text-centered">Abstract</h2>
     <div class="abstract-container">
       <p class="content has-text-justified">
@@ -241,48 +222,43 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
       <div id="results-carousel2" class="carousel results-carousel">
         <div class="item item-sample1">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample1" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample1.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample2">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample2" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample2.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample3">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample3" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample3.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample4">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample4" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample4.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample5">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample5" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample5.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample6">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample6" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample6.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample7">
-          <video autoplay controls muted loop playsinline height="100%">
+          <video poster="" id="sample7" autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample7.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-sample8">
-          <video autoplay controls muted loop playsinline height="100%">
-            <source src="assets/circle/sample8.mp4" type="video/mp4">
           </video>
         </div>
       </div>
