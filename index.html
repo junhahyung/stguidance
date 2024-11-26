@@ -56,18 +56,6 @@
       text-align: center;
       color: #555;
     }
-    .custom-carousel .item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .custom-carousel video {
-      margin: 0 auto;
-      width: 60%;
-      max-width: 100%;
-      height: auto;
-    }
   </style>
 </head>
 <body>
@@ -145,11 +133,6 @@
               </span>
             </div>
           </div>
-          <!-- 중앙선과 텍스트 추가 -->
-          <hr style="margin: 30px auto; width: 100%; border: 1px solid #ccc;">
-          <p style="font-size: 1.2rem; color: #555; margin-top: 20px;">
-            Create high-quality videos without compromising diversity or motion dynamics using <strong>Spatiotemporal Skip Guidance (STG)</strong>
-          </p>
         </div>
       </div>
     </div>
@@ -239,18 +222,38 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="custom-container is-max-desktop">
-    <div class="hero-body">
-      <div id="custom-carousel" class="carousel results-carousel">
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carouse2" class="carousel results-carousel">
         <div class="item item-sample1">
-          <video autoplay controls muted loop playsinline height="100%">
-            <source src="assets/circle/sample1.mp4" type="video/mp4">
+          <video poster="" id="sample1" autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/SVD/sample1.mp4" type="video/mp4">
           </video>
         </div>
         <div class="item item-sample2">
-          <video autoplay controls muted loop playsinline height="100%">
-            <source src="assets/circle/sample2.mp4" type="video/mp4">
+          <video poster="" id="sample2" autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/SVD/sample2.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample4">
+          <video poster="" id="sample3" autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/SVD/sample4.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample3">
+          <video poster="" id="sample4" autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/SVD/sample3.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample5">
+          <video poster="" id="sample5" autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/SVD/sample5.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample6">
+          <video poster="" id="sample6" autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/SVD/sample6.mp4" type="video/mp4">
           </video>
         </div>
       </div>
@@ -264,18 +267,6 @@
   </div>
 </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  bulmaCarousel.attach('#custom-carousel', {
-    slidesToScroll: 1,
-    slidesToShow: 1,
-    autoplay: true,
-    loop: true,
-    pauseOnHover: true,
-    interval: 10000, // 전환 시간 설정 (단위: ms, 5000ms = 5초)
-  });
-});
-</script>
 
 </body>
 </html>
