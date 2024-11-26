@@ -46,32 +46,15 @@
       text-align: center;
       color: #555;
     }
-    /* 첫 번째 캐러셀 스타일 */
-    .first-carousel .item {
+    .carousel .item {
       display: flex;
       justify-content: center;
       align-items: center;
-      /* 첫 번째 캐러셀에만 적용되는 스타일 */
     }
     
-    .first-carousel video {
+    .carousel video {
       max-width: 100%;
       height: auto;
-      /* 첫 번째 캐러셀 전용 스타일 */
-    }
-    
-    /* 두 번째 캐러셀 스타일 */
-    .second-carousel .item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      /* 두 번째 캐러셀에만 적용되는 스타일 */
-    }
-    
-    .second-carousel video {
-      max-width: 100%;
-      height: auto;
-      /* 두 번째 캐러셀 전용 스타일 */
     }
   </style>
 </head>
@@ -161,13 +144,13 @@
     <!-- 두 비디오 나란히 -->
     <div class="video-row">
       <div class="video-container">
-        <video autoplay muted loop playsinline width="700">
+        <video autoplay muted loop playsinline width="500">
           <source src="assets/mochi_butterfly.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
       <div class="video-container">
-        <video autoplay muted loop playsinline width="700">
+        <video autoplay muted loop playsinline width="500">
           <source src="assets/mochi_paint.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -182,7 +165,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <div id="results-carousel" class="carousel results-carousel first-carousel">
+      <div id="results-carousel" class="carousel results-carousel">
         <div class="item item-sample1">
           <video autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample1.mp4" type="video/mp4">
@@ -218,6 +201,11 @@
             <source src="assets/circle/sample7.mp4" type="video/mp4">
           </video>
         </div>
+        <div class="item item-sample8">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample8.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
     </div>
   </div>
@@ -239,25 +227,24 @@
   </div>
 </section>
   
-
 <footer class="footer">
   <div class="content has-text-centered">
     <p>&copy; 2025 Spatiotemporal Skip Guidance. All rights reserved.</p>
   </div>
 </footer>
 
+<script>
 document.addEventListener('DOMContentLoaded', function () {
-  // 첫 번째 캐러셀 초기화
   bulmaCarousel.attach('#results-carousel', {
     slidesToScroll: 1,
     slidesToShow: 1,
     autoplay: true,
     loop: true,
     pauseOnHover: true,
-    interval: 7000, // 5초
+    interval: 10000, // 전환 시간 설정 (단위: ms, 5000ms = 5초)
   });
-
 });
+</script>
 
 </body>
 </html>
