@@ -97,19 +97,17 @@
 <section class="hero hero-background-video" style="height: 100vh;">
   <style>
     .hero-background-video {
-      height: 100vh !important; /* 높이를 뷰포트 높이로 설정 */
+      height: 100vh !important; /* 섹션 높이를 뷰포트 높이로 설정 */
       display: flex; /* Flexbox 사용 */
       justify-content: center; /* 가로 중앙 정렬 */
-      align-items: flex-start; /* 세로 방향에서 시작점 기준 정렬 */
-      position: relative; /* 위치 조정 */
+      align-items: center; /* 세로 중앙 정렬 */
+      position: relative;
     }
 
     .hero-background-video .hero-body {
-      position: relative; /* 위치 조정 */
-      top: 50%; /* 상단에서 50% 아래로 이동 */
-      transform: translateY(-50%); /* 정확히 가운데 정렬 */
       text-align: center; /* 텍스트 중앙 정렬 */
       color: white !important; /* 텍스트 흰색 */
+      z-index: 1; /* 텍스트를 비디오 위에 배치 */
     }
 
     .hero-background-video .publication-title {
@@ -122,19 +120,19 @@
     }
 
     .hero-background-video a:hover {
-      color: lightgray !important;
+      color: lightgray !important; /* 링크 호버 색상 */
     }
 
     .hero-background-video video {
-      position: absolute;
+      position: absolute; /* 비디오를 절대 위치로 설정 */
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
-      opacity: 0.7;
+      transform: translate(-50%, -50%); /* 비디오를 섹션 중앙에 배치 */
+      width: 100vw; /* 비디오 너비를 뷰포트 전체로 설정 */
+      height: 100vh; /* 비디오 높이를 뷰포트 전체로 설정 */
+      object-fit: cover; /* 비디오를 화면에 맞게 채우기 */
+      z-index: -1; /* 비디오를 텍스트 뒤로 배치 */
+      opacity: 0.7; /* 비디오 투명도 설정 */
     }
   </style>
 
@@ -145,27 +143,25 @@
   </video>
 
   <div class="hero-body">
-    <div class="custom-container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="">Junha Hyung*</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="">Kinam Kim*</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="">Susung Hong</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="">Min-Jung Kim</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="">Jaegul Choo</a><sup>1</sup>
-            </span>
-          </div>
+    <div class="custom-container">
+      <div>
+        <h1 class="title is-1 publication-title">Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling</h1>
+        <div class="is-size-5 publication-authors">
+          <span class="author-block">
+            <a href="">Junha Hyung*</a><sup>1</sup>,
+          </span>
+          <span class="author-block">
+            <a href="">Kinam Kim*</a><sup>1</sup>,
+          </span>
+          <span class="author-block">
+            <a href="">Susung Hong</a><sup>2</sup>,
+          </span>
+          <span class="author-block">
+            <a href="">Min-Jung Kim</a><sup>1</sup>,
+          </span>
+          <span class="author-block">
+            <a href="">Jaegul Choo</a><sup>1</sup>
+          </span>
         </div>
       </div>
     </div>
