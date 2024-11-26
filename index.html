@@ -77,7 +77,6 @@
     .hero-background-video .hero-body {
       position: relative;
       z-index: 1;
-      color: white;
     }
     
     /* 다른 hero 섹션에는 영향 없음 */
@@ -91,19 +90,22 @@
       position: relative;
     }
 
-    .hero-background-video .hero-body a {
-      color: white; /* 링크 텍스트도 흰색으로 설정 */
-      text-decoration: underline; /* 링크 강조 유지 (필요 시 제거 가능) */
-    }
-  
-    .hero-background-video .hero-body a:hover {
-      color: #ddd; /* 링크에 마우스를 올렸을 때 약간 더 밝은 색으로 설정 (선택사항) */
-    }
   </style>
 </head>
 <body>
   
 <section class="hero hero-background-video">
+  <style>
+    .hero-background-video .hero-body {
+      color: white;
+    }
+    .hero-background-video a {
+      color: white;
+    }
+    .hero-background-video a:hover {
+      color: lightgray;
+    }
+  </style>
   <!-- 배경 비디오 추가 -->
   <video autoplay muted loop playsinline>
     <source src="assets/background.mp4" type="video/mp4">
