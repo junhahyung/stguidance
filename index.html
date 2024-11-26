@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/linear.svg">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <script src="./static/js/bulma-carousel.min.js"></script>
 
   <style>
     .abstract-container {
@@ -43,82 +45,6 @@
       font-style: italic;
       text-align: center;
       color: #555;
-    }
-    .carousel {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-    }
-    .carousel .item {
-      flex: 0 0 auto;
-      width: 600px; /* Half size */
-      max-width: 100%;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .carousel video {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-    .pagination-dots {
-      display: flex;
-      justify-content: center;
-      margin-top: 15px;
-      gap: 10px;
-    }
-    .pagination-dots .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #ccc;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .pagination-dots .dot.active {
-      background: #333;
-    }
-    .pagination-dots .dot:hover {
-      background: #555;
-    }
-    .carousel-wrapper {
-      position: relative; /* 화살표 버튼 위치를 설정하기 위해 relative */
-      display: flex; /* 버튼과 동영상을 가로로 정렬 */
-      justify-content: center; /* 전체를 화면 가운데로 정렬 */
-      align-items: center; /* 버튼과 동영상 세로 정렬 */
-    }
-    
-    .arrow {
-      position: absolute; /* 부모 요소를 기준으로 버튼 위치 설정 */
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-    
-    .arrow.left {
-      left: -50px; /* 동영상 왼쪽에서 약간 떨어진 위치 */
-    }
-    
-    .arrow.right {
-      right: -50px; /* 동영상 오른쪽에서 약간 떨어진 위치 */
-    }
-    
-    .carousel .item {
-      display: flex;
-      justify-content: center; /* 동영상을 가운데 정렬 */
-      align-items: center;
     }
   </style>
 </head>
@@ -227,62 +153,50 @@
 </section>
 
 <section class="section">
-  <div class="container">
-    <div class="carousel-wrapper">
-      <button class="arrow left">&#8249;</button>
-      <div class="carousel">
-        <div class="item">
-          <video id="sample1" autoplay muted loop playsinline>
-            <source src="assets/circle/sample1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample2" autoplay muted loop playsinline>
-            <source src="assets/circle/sample2.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample3" autoplay muted loop playsinline>
-            <source src="assets/circle/sample3.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample4" autoplay muted loop playsinline>
-            <source src="assets/circle/sample4.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample5.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample6.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample7.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample8.mp4" type="video/mp4">
-          </video>
-        </div>
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Carousel with Bulma</h2>
+    <!-- Bulma Carousel -->
+    <div class="carousel" data-autoplay="true" data-loop="true" data-slides-to-show="1" data-pause-on-hover="true">
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample1.mp4" type="video/mp4">
+        </video>
       </div>
-      <button class="arrow right">&#8250;</button>
-    </div>
-    <div class="pagination-dots">
-      <span class="dot active" data-index="0"></span>
-      <span class="dot" data-index="1"></span>
-      <span class="dot" data-index="2"></span>
-      <span class="dot" data-index="3"></span>
-      <span class="dot" data-index="4"></span>
-      <span class="dot" data-index="5"></span>
-      <span class="dot" data-index="6"></span>
-      <span class="dot" data-index="7"></span>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample2.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample3.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample4.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample5.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample6.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample7.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="carousel-item">
+        <video autoplay muted loop playsinline>
+          <source src="assets/circle/sample8.mp4" type="video/mp4">
+        </video>
+      </div>
     </div>
   </div>
 </section>
@@ -302,67 +216,6 @@
     </div>
   </div>
 </section>
-
-<section class="section">
-  <div class="container">
-    <div class="carousel-wrapper">
-      <button class="arrow left">&#8249;</button>
-      <div class="carousel">
-        <div class="item">
-          <video id="sample1" autoplay muted loop playsinline>
-            <source src="assets/circle/sample1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample2" autoplay muted loop playsinline>
-            <source src="assets/circle/sample2.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample3" autoplay muted loop playsinline>
-            <source src="assets/circle/sample3.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample4" autoplay muted loop playsinline>
-            <source src="assets/circle/sample4.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample5.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample6.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample7.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item">
-          <video id="sample5" autoplay muted loop playsinline>
-            <source src="assets/circle/sample8.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <button class="arrow right">&#8250;</button>
-    </div>
-    <div class="pagination-dots">
-      <span class="dot active" data-index="0"></span>
-      <span class="dot" data-index="1"></span>
-      <span class="dot" data-index="2"></span>
-      <span class="dot" data-index="3"></span>
-      <span class="dot" data-index="4"></span>
-      <span class="dot" data-index="5"></span>
-      <span class="dot" data-index="6"></span>
-      <span class="dot" data-index="7"></span>
-    </div>
-  </div>
-</section>
   
 <footer class="footer">
   <div class="content has-text-centered">
@@ -371,41 +224,14 @@
 </footer>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const carousel = document.querySelector(".carousel");
-    const dots = document.querySelectorAll(".pagination-dots .dot");
-    const items = carousel.querySelectorAll(".item");
-    const leftArrow = document.querySelector(".arrow.left");
-    const rightArrow = document.querySelector(".arrow.right");
-    let currentIndex = 0;
-
-    function updateCarousel(index) {
-      items.forEach((item, i) => {
-        item.style.display = i === index ? "block" : "none";
-      });
-      dots.forEach((dot, i) => {
-        dot.classList.toggle("active", i === index);
-      });
-    }
-
-    dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => {
-        currentIndex = index;
-        updateCarousel(currentIndex);
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    bulmaCarousel.attach('.carousel', {
+      slidesToScroll: 1,
+      slidesToShow: 1,
+      autoplay: true,
+      loop: true,
+      pauseOnHover: true,
     });
-
-    leftArrow.addEventListener("click", () => {
-      currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
-      updateCarousel(currentIndex);
-    });
-
-    rightArrow.addEventListener("click", () => {
-      currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
-      updateCarousel(currentIndex);
-    });
-
-    updateCarousel(currentIndex);
   });
 </script>
 
