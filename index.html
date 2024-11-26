@@ -110,10 +110,17 @@
       text-align: center; /* 텍스트 가로 중앙 정렬 */
       color: white !important; /* 텍스트 색상 흰색 */
       z-index: 1; /* 텍스트를 비디오 위에 배치 */
+      display: flex; /* Flexbox 사용 */
+      flex-direction: column; /* 세로 방향으로 정렬 */
+      justify-content: center; /* 세로 중앙 정렬 */
+      align-items: center; /* 가로 중앙 정렬 */
+      width: 100%; /* 텍스트 박스의 가로 크기를 전체로 설정 */
+      height: 100%; /* 텍스트 박스의 세로 크기를 전체로 설정 */
     }
 
     .hero-background-video .publication-title {
       color: white !important; /* 제목 텍스트 색상 흰색 */
+      margin-bottom: 10px; /* 아래 간격 */
     }
 
     .hero-background-video a {
