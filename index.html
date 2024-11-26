@@ -97,22 +97,35 @@
 <section class="hero hero-background-video" style="height: 100vh;">
   <style>
     .hero-background-video {
-      height: 100vh !important; /* 높이를 두 배로 설정 */
-    }
-    .hero-background-video .publication-title {
-      color: white !important; /* 흰색으로 강제 변경 */
+      height: 100vh !important; /* 높이를 뷰포트 높이로 설정 */
+      display: flex; /* Flexbox를 사용 */
+      justify-content: center; /* 가로 중앙 정렬 */
+      align-items: center; /* 세로 중앙 정렬 */
     }
     .hero-background-video .hero-body {
-      color: white !important; /* 모든 텍스트를 흰색으로 강제 변경 */
+      text-align: center; /* 텍스트 정렬 */
+      color: white !important; /* 텍스트 색상 흰색으로 강제 변경 */
     }
-  
+    .hero-background-video .publication-title {
+      color: white !important;
+    }
     .hero-background-video a {
-      color: white !important; /* 링크 텍스트도 흰색으로 강제 변경 */
-      text-decoration: none; /* 선택적으로 밑줄 제거 */
+      color: white !important; /* 링크 텍스트 흰색 */
+      text-decoration: none;
     }
-  
     .hero-background-video a:hover {
-      color: lightgray !important; /* 링크 호버 색상 */
+      color: lightgray !important;
+    }
+    .hero-background-video video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.7;
     }
   </style>
   <!-- 배경 비디오 추가 -->
@@ -148,6 +161,7 @@
     </div>
   </div>
 </section>
+
 
 <section class="section">
   <div class="custom-container">
