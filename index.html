@@ -240,7 +240,7 @@
 <section class="section">
   <div class="custom-container is-max-desktop">
     <div class="hero-body">
-      <div id="results-carousel" class="carousel results-carousel">
+      <div id="custom-carousel" class="carousel results-carousel">
         <div class="item item-sample1">
           <video autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample1.mp4" type="video/mp4">
@@ -262,6 +262,18 @@
   </div>
 </footer>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  bulmaCarousel.attach('#custom-carousel', {
+    slidesToScroll: 1,
+    slidesToShow: 1,
+    autoplay: true,
+    loop: true,
+    pauseOnHover: true,
+    interval: 10000, // 전환 시간 설정 (단위: ms, 5000ms = 5초)
+  });
+});
+</script>
 
 </body>
 </html>
