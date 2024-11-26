@@ -144,13 +144,13 @@
     <!-- 두 비디오 나란히 -->
     <div class="video-row">
       <div class="video-container">
-        <video autoplay muted loop playsinline width="500">
+        <video autoplay muted loop playsinline width="700">
           <source src="assets/mochi_butterfly.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
       <div class="video-container">
-        <video autoplay muted loop playsinline width="500">
+        <video autoplay muted loop playsinline width="700">
           <source src="assets/mochi_paint.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -201,11 +201,6 @@
             <source src="assets/circle/sample7.mp4" type="video/mp4">
           </video>
         </div>
-        <div class="item item-sample8">
-          <video autoplay controls muted loop playsinline height="100%">
-            <source src="assets/circle/sample8.mp4" type="video/mp4">
-          </video>
-        </div>
       </div>
     </div>
   </div>
@@ -226,6 +221,51 @@
     </div>
   </div>
 </section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="title is-3 has-text-centered">Additional Carousel</h2>
+    <div class="hero-body">
+      <div id="additional-carousel" class="carousel additional-carousel">
+        <div class="item item-sample1">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample2">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample2.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample3">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample3.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample4">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample4.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample5">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample5.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample6">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample6.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-sample7">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="assets/circle/sample7.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
   
 <footer class="footer">
   <div class="content has-text-centered">
@@ -235,13 +275,24 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  // 기존 캐러셀 초기화
   bulmaCarousel.attach('#results-carousel', {
     slidesToScroll: 1,
     slidesToShow: 1,
     autoplay: true,
     loop: true,
     pauseOnHover: true,
-    interval: 10000, // 전환 시간 설정 (단위: ms, 5000ms = 5초)
+    interval: 10000, // 전환 시간 설정 (단위: ms)
+  });
+
+  // 새로운 캐러셀 초기화
+  bulmaCarousel.attach('#additional-carousel', {
+    slidesToScroll: 1,
+    slidesToShow: 1,
+    autoplay: true,
+    loop: true,
+    pauseOnHover: true,
+    interval: 7000, // 독립적인 전환 시간 설정 (단위: ms, 여기서는 7초)
   });
 });
 </script>
