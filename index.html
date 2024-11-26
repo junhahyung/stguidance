@@ -148,7 +148,7 @@
       left: 50%;
       transform: translate(-50%, -50%); /* 비디오를 섹션 중앙에 위치 */
       width: 100%; /* 비디오의 가로 크기를 섹션에 맞춤 */
-      height: 100%; /* 비디오의 세로 크기를 섹션에 맞춤 */
+      height: 100%; /* 비디오의 세로 크기를 맞춤 */
       object-fit: cover; /* 비디오를 섹션 크기에 맞게 채움 */
       z-index: -1; /* 비디오를 텍스트 뒤로 배치 */
       opacity: 0.9; /* 비디오 투명도 설정 */
@@ -182,27 +182,45 @@
             <a href="">Jaegul Choo</a><sup>1</sup>
           </span>
         </div>
+
+        <div class="is-size-5 publication-authors">
+          <span class="author-block"><sup>1</sup>KAIST AI,</span>
+          <span class="author-block"><sup>2</sup>University of Washington</span>
+        </div>
+
+        <div class="is-size-6" style="margin-top: 5px;">*Equal contribution</div>
+
+        <div class="publication-links" style="margin-top: 20px;">
+          <span class="link-block">
+            <a href="link-to-paper.pdf" class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="fas fa-file-pdf"></i>
+              </span>
+              <span>Paper</span>
+            </a>
+          </span>
+          <span class="link-block">
+            <a href="link-to-arxiv" class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="ai ai-arxiv"></i>
+              </span>
+              <span>arXiv</span>
+            </a>
+          </span>
+          <span class="link-block">
+            <a href="link-to-code" class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="fab fa-github"></i>
+              </span>
+              <span>Code</span>
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </section>
-<script>
-  const video = document.querySelector('.hero-background-video video');
 
-  video.addEventListener('timeupdate', () => {
-    if (video.currentTime >= video.duration - 0.1) {
-      // 끝에 가까워지면 바로 처음으로 이동
-      video.currentTime = 0; 
-      video.play(); // 즉시 재생
-    }
-  });
-
-  // 비디오 로드 완료 후 초기 재생 설정
-  video.addEventListener('loadeddata', () => {
-    video.playbackRate = 1; // 재생 속도 설정
-    video.play();           // 자동 재생
-  });
-</script>
 
 <section class="section">
   <div class="custom-container">
