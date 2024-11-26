@@ -46,15 +46,32 @@
       text-align: center;
       color: #555;
     }
-    .carousel .item {
+    /* 첫 번째 캐러셀 스타일 */
+    .first-carousel .item {
       display: flex;
       justify-content: center;
       align-items: center;
+      /* 첫 번째 캐러셀에만 적용되는 스타일 */
     }
     
-    .carousel video {
+    .first-carousel video {
       max-width: 100%;
       height: auto;
+      /* 첫 번째 캐러셀 전용 스타일 */
+    }
+    
+    /* 두 번째 캐러셀 스타일 */
+    .second-carousel .item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* 두 번째 캐러셀에만 적용되는 스타일 */
+    }
+    
+    .second-carousel video {
+      max-width: 100%;
+      height: auto;
+      /* 두 번째 캐러셀 전용 스타일 */
     }
   </style>
 </head>
@@ -165,7 +182,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <div id="results-carousel" class="carousel results-carousel">
+      <div id="results-carousel" class="carousel results-carousel first-carousel">
         <div class="item item-sample1">
           <video autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample1.mp4" type="video/mp4">
@@ -225,7 +242,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <div id="additional-carousel" class="carousel results-carousel">
+      <div id="additional-carousel" class="carousel results-carousel second-carousel">
         <div class="item item-sample1">
           <video autoplay controls muted loop playsinline height="100%">
             <source src="assets/circle/sample1.mp4" type="video/mp4">
@@ -272,18 +289,27 @@
   </div>
 </footer>
 
-<script>
 document.addEventListener('DOMContentLoaded', function () {
-  // 기존 캐러셀 초기화
+  // 첫 번째 캐러셀 초기화
   bulmaCarousel.attach('#results-carousel', {
     slidesToScroll: 1,
     slidesToShow: 1,
     autoplay: true,
     loop: true,
     pauseOnHover: true,
-    interval: 7000, // 전환 시간 설정 (단위: ms)
+    interval: 7000, // 5초
   });
-</script>
+
+  // 두 번째 캐러셀 초기화
+  bulmaCarousel.attach('#additional-carousel', {
+    slidesToScroll: 1,
+    slidesToShow: 1,
+    autoplay: true,
+    loop: true,
+    pauseOnHover: true,
+    interval: 7000, // 7초
+  });
+});
 
 </body>
 </html>
