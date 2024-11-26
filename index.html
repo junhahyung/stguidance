@@ -56,15 +56,19 @@
       text-align: center;
       color: #555;
     }
+    .carousel video {
+      max-width: 80%; /* 동영상 최대 너비 */
+      max-height: 500px; /* 동영상 최대 높이 */
+      width: auto; /* 자동 비율 유지 */
+      height: auto; /* 자동 비율 유지 */
+      margin: 0 auto; /* 동영상 중앙 정렬 */
+    }
+
+    /* 캐러셀 내 컨텐츠 정렬 */
     .carousel .item {
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    
-    .carousel video {
-      max-width: 100%;
-      height: auto;
     }
   </style>
 </head>
