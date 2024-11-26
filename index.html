@@ -58,8 +58,8 @@
     }
     .hero {
     position: relative;
-    overflow: hidden; /* 비디오가 섹션을 넘어가지 않도록 설정 */
-    color: white; /* 텍스트가 비디오 위에서 잘 보이도록 설정 */
+    overflow: hidden;
+    color: white;
     }
   
     .hero video {
@@ -67,17 +67,31 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      z-index: -1; /* 비디오를 텍스트 뒤로 보내기 */
-      opacity: 0.7; /* 비디오를 살짝 투명하게 설정 */
+      width: 100vw; /* Viewport 너비 */
+      height: 100vh; /* Viewport 높이 */
+      object-fit: cover; /* 화면에 꽉 차도록 설정 */
+      z-index: -1; /* 텍스트 뒤로 이동 */
+      opacity: 0.7; /* 살짝 투명하게 */
     }
   
     .hero-body {
       position: relative;
-      z-index: 1; /* 텍스트를 비디오 위로 올리기 */
+      z-index: 1; /* 텍스트를 비디오 위로 이동 */
+    }
+  
+    /* 전역 스타일 초기화 방지 */
+    .hero:not(.is-light) + .section {
+      margin-top: 0; /* 섹션 간의 여백 문제를 방지 */
+    }
+  
+    /* 캐러셀 섹션에 영향 방지 */
+    .section {
+      position: relative;
+      z-index: 0; /* 배경 비디오 영향 제거 */
+    }
+  
+    .carousel .item video {
+      object-fit: contain; /* 비율 유지 */
     }
   </style>
 </head>
