@@ -156,7 +156,7 @@
   </style>
 
   <!-- 배경 비디오 추가 -->
-  <video autoplay muted playsinline>
+  <video autoplay muted playsinline loop>
     <source src="assets/processed_background_highres.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
@@ -186,33 +186,6 @@
     </div>
   </div>
 </section>
-
-<script>
-  const video = document.querySelector('.hero-background-video video');
-
-  let isReversing = false;
-
-  video.addEventListener('timeupdate', () => {
-    if (!isReversing && video.currentTime >= video.duration - 0.1) {
-      // 정방향 재생이 끝났을 때
-      isReversing = true;
-      video.playbackRate = -1;
-      video.play();
-    } else if (isReversing && video.currentTime <= 0.1) {
-      // 역방향 재생이 끝났을 때
-      isReversing = false;
-      video.playbackRate = 1;
-      video.play();
-    }
-  });
-
-  // 비디오 로드 완료 후 초기 재생 설정
-  video.addEventListener('loadeddata', () => {
-    video.playbackRate = 1;
-    video.play();
-  });
-</script>
-
 
 <section class="section">
   <div class="custom-container">
