@@ -56,44 +56,44 @@
       text-align: center;
       color: #555;
     }
-    .hero {
-    position: relative;
-    overflow: hidden;
-    color: white;
+    .hero-background-video {
+      position: relative;
+      overflow: hidden;
+      color: white;
     }
-  
-    .hero video {
+    
+    .hero-background-video video {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 100vw; /* Viewport 너비 */
-      height: 100vh; /* Viewport 높이 */
-      object-fit: cover; /* 화면에 꽉 차도록 설정 */
-      z-index: -1; /* 텍스트 뒤로 이동 */
-      opacity: 0.7; /* 살짝 투명하게 */
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.7;
     }
-  
-    .hero-body {
+    
+    .hero-background-video .hero-body {
       position: relative;
-      z-index: 1; /* 텍스트를 비디오 위로 이동 */
+      z-index: 1;
     }
-  
-    /* 전역 스타일 초기화 방지 */
-    .hero:not(.is-light) + .section {
-      margin-top: 0; /* 섹션 간의 여백 문제를 방지 */
+    
+    /* 다른 hero 섹션에는 영향 없음 */
+    .hero:not(.hero-background-video) {
+      z-index: auto;
     }
-  
-    /* 캐러셀 섹션에 영향 방지 */
+    
+    /* 다른 섹션에도 영향 없음 */
     .section {
+      z-index: 0;
       position: relative;
-      z-index: 0; /* 배경 비디오 영향 제거 */
     }
   </style>
 </head>
 <body>
   
-<section class="hero">
+<section class="hero hero-background-video">
   <!-- 배경 비디오 추가 -->
   <video autoplay muted loop playsinline>
     <source src="assets/background.mp4" type="video/mp4">
@@ -121,36 +121,6 @@
             <span class="author-block">
               <a href="">Jaegul Choo</a><sup>1</sup>
             </span>
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>KAIST</span>
-            <span class="author-block"><sup>2</sup>University of Washington</span>
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">(* Equal contribution)</span>
-          </div>
-
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <span class="link-block">
-                <a href="./static/pdf/erankgs_paper.pdf" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://github.com/junhahyung/STGuidance" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                </a>
-              </span>
-            </div>
           </div>
         </div>
       </div>
