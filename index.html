@@ -93,124 +93,138 @@
 </head>
 <body>
   
-<section class="hero hero-background-video" style="height: 100vh;">
-  <style>
-    /* 비디오 섹션 전체 설정 */
-    .hero-background-video {
-      height: 100vh !important; /* 섹션의 높이를 뷰포트와 일치 */
-      display: flex; /* Flexbox 사용 */
-      justify-content: center; /* 가로 중앙 정렬 */
-      align-items: center; /* 세로 중앙 정렬 */
-      position: relative; /* 위치 조정 */
-    }
+<style>
+/* 비디오 섹션 전체 설정 */
+.hero-background-video {
+  height: 100vh !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
 
-    /* 텍스트 설정 */
-    .hero-background-video .hero-body {
-      text-align: center; /* 텍스트 가로 중앙 정렬 */
-      color: white !important; /* 텍스트 색상 흰색 */
-      z-index: 1; /* 텍스트를 비디오 위에 배치 */
-      display: flex; /* Flexbox 사용 */
-      flex-direction: column; /* 세로 방향으로 정렬 */
-      justify-content: center; /* 세로 중앙 정렬 */
-      align-items: center; /* 가로 중앙 정렬 */
-      width: 100%; /* 텍스트 박스의 가로 크기를 전체로 설정 */
-      height: 100%; /* 텍스트 박스의 세로 크기를 전체로 설정 */
-      font-size: 1rem !important; /* 텍스트 크기를 현재의 절반으로 */
-    }
-    
-    /* 제목 크기 조정 */
-    .hero-background-video .publication-title {
-      font-size: 4rem !important; /* 제목 크기를 절반으로 */
-      color: white !important; /* 제목 텍스트 색상 흰색 */
-      margin-bottom: 10px; /* 아래 간격 */
-    }
-    
-    /* 저자 텍스트 크기 조정 */
-    .hero-background-video .publication-authors {
-      font-size: 1.5rem !important; 
-      margin-top: 10px;
-    }
+/* 텍스트 설정 */
+.hero-background-video .hero-body {
+  text-align: center;
+  color: white !important;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1rem !important;
+  opacity: 0; /* 초기 상태에서 보이지 않게 설정 */
+  transform: translateY(-30px); /* 약간 위에서 시작 */
+  animation: fadeInDown 1s ease-in-out forwards; /* 애니메이션 적용 */
+  animation-delay: 0.5s; /* 비디오와 텍스트 간의 약간의 지연 */
+}
 
-    .hero-background-video a {
-      color: white !important; /* 링크 텍스트 색상 흰색 */
-      text-decoration: none;
-    }
+/* 텍스트 애니메이션 */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    .hero-background-video a:hover {
-      color: lightgray !important; /* 링크 호버 색상 */
-    }
+/* 제목 크기 조정 */
+.hero-background-video .publication-title {
+  font-size: 4rem !important;
+  color: white !important;
+  margin-bottom: 10px;
+}
 
-    /* 비디오 설정 */
-    .hero-background-video video {
-      position: absolute; /* 비디오를 절대 위치로 설정 */
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%); /* 비디오를 섹션 중앙에 위치 */
-      width: 100%; /* 비디오의 가로 크기를 섹션에 맞춤 */
-      height: 100%; /* 비디오의 세로 크기를 맞춤 */
-      object-fit: cover; /* 비디오를 섹션 크기에 맞게 채움 */
-      z-index: -1; /* 비디오를 텍스트 뒤로 배치 */
-      opacity: 0.9; /* 비디오 투명도 설정 */
-    }
-  </style>
+/* 저자 텍스트 크기 조정 */
+.hero-background-video .publication-authors {
+  font-size: 1.5rem !important; 
+  margin-top: 10px;
+}
 
-  <!-- 배경 비디오 추가 -->
-  <video autoplay muted playsinline>
-    <source src="assets/processed_background_highres.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+.hero-background-video a {
+  color: white !important;
+  text-decoration: none;
+}
 
-  <div class="hero-body">
-    <div class="custom-container">
-      <div>
-        <h1 class="title is-1 publication-title">Spatiotemporal Skip Guidance<br> for Enhanced Video Diffusion Sampling</h1>
-        <div class="is-size-5 publication-authors">
-          <span class="author-block">
-            <a href="https://junhahyung.github.io/" target="_blank" rel="noopener noreferrer">Junha Hyung*</a><sup>1</sup>,
-          </span>
-          <span class="author-block">
-            <a href="">Kinam Kim*</a><sup>1</sup>,
-          </span>
-          <span class="author-block">
-            <a href="">Susung Hong</a><sup>2</sup>,
-          </span>
-          <span class="author-block">
-            <a href="">Min-Jung Kim</a><sup>1</sup>,
-          </span>
-          <span class="author-block">
-            <a href="">Jaegul Choo</a><sup>1</sup>
-          </span>
-        </div>
+.hero-background-video a:hover {
+  color: lightgray !important;
+}
 
-        <div class="is-size-6" style="margin-top: 5px;">*Equal contribution</div>
-      
-        <div class="is-size-5 publication-authors">
-          <span class="author-block"><sup>1</sup>KAIST AI</span>&nbsp;&nbsp;
-          <span class="author-block"><sup>2</sup>University of Washington</span>
-        </div>
+/* 비디오 설정 */
+.hero-background-video video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.9;
+}
+</style>
 
-        <div class="publication-links" style="margin-top: 20px;">
-          <span class="link-block">
-            <a href="link-to-paper.pdf" class="external-link button is-normal is-rounded is-dark">
-              <span class="icon">
-                <i class="fas fa-file-pdf"></i>
-              </span>
-              <span>Paper</span>
-            </a>
-          </span>
-          <span class="link-block">
-            <a href="link-to-arxiv" class="external-link button is-normal is-rounded is-dark">
-              <span class="icon">
-                <i class="ai ai-arxiv"></i>
-              </span>
-              <span>arXiv</span>
-            </a>
-          </span>
-        </div>
+<!-- 배경 비디오 추가 -->
+<video autoplay muted playsinline>
+  <source src="assets/processed_background_highres.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<div class="hero-body">
+  <div class="custom-container">
+    <div>
+      <h1 class="title is-1 publication-title">Spatiotemporal Skip Guidance<br> for Enhanced Video Diffusion Sampling</h1>
+      <div class="is-size-5 publication-authors">
+        <span class="author-block">
+          <a href="https://junhahyung.github.io/" target="_blank" rel="noopener noreferrer">Junha Hyung*</a><sup>1</sup>,
+        </span>
+        <span class="author-block">
+          <a href="">Kinam Kim*</a><sup>1</sup>,
+        </span>
+        <span class="author-block">
+          <a href="">Susung Hong</a><sup>2</sup>,
+        </span>
+        <span class="author-block">
+          <a href="">Min-Jung Kim</a><sup>1</sup>,
+        </span>
+        <span class="author-block">
+          <a href="">Jaegul Choo</a><sup>1</sup>
+        </span>
+      </div>
+
+      <div class="is-size-6" style="margin-top: 5px;">*Equal contribution</div>
+
+      <div class="is-size-5 publication-authors">
+        <span class="author-block"><sup>1</sup>KAIST AI</span>&nbsp;&nbsp;
+        <span class="author-block"><sup>2</sup>University of Washington</span>
+      </div>
+
+      <div class="publication-links" style="margin-top: 20px;">
+        <span class="link-block">
+          <a href="link-to-paper.pdf" class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="fas fa-file-pdf"></i>
+            </span>
+            <span>Paper</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="link-to-arxiv" class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="ai ai-arxiv"></i>
+            </span>
+            <span>arXiv</span>
+          </a>
+        </span>
       </div>
     </div>
   </div>
-</section>
+</div>
 <script>
 const video = document.querySelector('.hero-background-video video');
 
