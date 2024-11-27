@@ -207,14 +207,14 @@ def generate_cli(
     # stg_block_idx=[30, 32, 35,]
     # stg_scale=[1.0, 2.0]
     stg_block_idx=[35]
-    stg_scale=[1.0]
+    stg_scale=[0.8]
     #---------------------------------#
     #----------Rescaling--------#
     do_rescaling = True
-    rescaling_scale = 0.8
+    rescaling_scale = 0.7
     #---------------------------#
     #----------SAMPLE-----------#
-    sample_mode = True
+    sample_mode = False
     #----------FIGURE-----------#
     figure_mode = False
     figure_idx = 37
