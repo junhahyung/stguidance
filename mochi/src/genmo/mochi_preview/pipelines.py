@@ -451,18 +451,6 @@ def sample_model(device, dit, conditioning, **args):
             else:
                 assert False, "Wrong Mode"
 
-        #---------------------Rescaling----------------------#
-        def rescaling(out_cond, output):
-            sigma_pos = out_cond.std()
-            sigma_cfg = output.std()
-            rescaled = output * (sigma_pos / sigma_cfg)
-            return rescaled
-
-        def final_scaling(rescaled, output, rescaling_scale):
-            x_final = rescaling_scale * rescaled + (1 - rescaling_scale) * output
-            return x_final
-        #----------------------------------------------------#
-
         if mode == "Uncond":
             out_uncond = out_uncond.to(z)
         elif mode == "perturb_STG" or mode == "perturb_PASS":
@@ -480,18 +468,19 @@ def sample_model(device, dit, conditioning, **args):
 
             if figure_mode:
                 return out_uncond, out_cond, out_perturb
-
-        #---------------------Rescaling----------------------#
+                
+            #---------------------Rescaling----------------------#
             if args["do_rescaling"]:
                 assert not figure_mode
                 rescaling_scale = args["rescaling_scale"]
                 print(f"[INFO] Rescaled with scale: {rescaling_scale}")
                 output = out_uncond + cfg_scale * (out_cond - out_uncond) \
                               + stg_scale * (out_cond - out_perturb)
-                output = rescaling(out_cond, output)
-                output = final_scaling(output, out_uncond, rescaling_scale)
+                factor = out_cond.std() / output.std()
+                factor = rescaling_scale * factor + (1 - rescaling_scale)
+                output = output * factor
                 return output
-        #----------------------------------------------------#
+            #----------------------------------------------------#
 
             return out_uncond + cfg_scale * (out_cond - out_uncond) \
                               + stg_scale * (out_cond - out_perturb)
@@ -499,13 +488,7 @@ def sample_model(device, dit, conditioning, **args):
             print(f"[INFO] cfg_scale: {cfg_scale}")
         #---------------------Rescaling----------------------#
             if args["do_rescaling"]:
-                assert not figure_mode
-                rescaling_scale = args["rescaling_scale"]
-                print(f"[INFO] Rescaled with scale: {rescaling_scale}")
-                output = out_uncond + cfg_scale * (out_cond - out_uncond)
-                output = rescaling(out_cond, output)
-                output = final_scaling(output, out_uncond, rescaling_scale)
-                return output
+                raise NotImplementedError
         #----------------------------------------------------#
             return out_uncond + cfg_scale * (out_cond - out_uncond)
         elif mode == "Uncond":
