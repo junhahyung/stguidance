@@ -396,20 +396,24 @@ video.addEventListener('loadeddata', () => {
     <h2 class="title is-3 has-text-centered">STG Enhancement Details</h2>
     <div class="abstract-container">
       <p class="content has-text-justified">
-        Spatiotemporal Skip Guidance (STG) enhances the generated video quality by selectively skipping residual blocks or attention layers during the video generation process. 
+        Spatiotemporal Skip Guidance (STG) enhances the generated video quality by selectively skipping residual blocks or attention layers during the video generation process. This skipping mechanism simplifies the model output, producing aligned and coherent frames while maintaining diversity and dynamic properties.
       </p>
       <p class="content has-text-justified">
         <strong>Residual Skip:</strong> To skip an entire residual block, the output is modified as follows:
       </p>
       <p class="content has-text-centered">
-        Res(<i>z<sub>l</sub></i>) = <i>z<sub>l+1</sub></i> = <i>f<sub>l</sub>(z<sub>l</sub>) + z<sub>l</sub></i>,<br>
-        Res′(<i>z<sub>l</sub></i>) = <i>z<sub>l+1</sub></i> = <i>z<sub>l</sub></i>.
+        \[
+        \text{Res}(z_l) = z_{l+1} = f_l(z_l) + z_l, \quad 
+        \text{Res}'(z_l) = z_{l+1} = z_l.
+        \]
       </p>
       <p class="content has-text-justified">
         <strong>Attention Skip:</strong> In self-attention, the computation of value tensors is adjusted as:
       </p>
       <p class="content has-text-centered">
-        SA(<i>Q, K, V</i>) = Softmax(<i>QK<sup>T</sup> / √d</i>)<i>V</i> = <i>AV</i>.
+        \[
+        \text{SA}(Q, K, V) = \text{Softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V = AV.
+        \]
       </p>
       <p class="content has-text-justified">
         By introducing these simple yet effective modifications, STG avoids the need for additional training or auxiliary models, achieving high-quality video synthesis efficiently.
@@ -417,6 +421,17 @@ video.addEventListener('loadeddata', () => {
     </div>
   </div>
 </section>
+
+<!-- MathJax 라이브러리 추가 -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  /* 수식 크기 조정 */
+  .MathJax {
+    font-size: 1.5rem; /* 수식 크기를 기본보다 두 배로 설정 */
+  }
+</style>
   
 <footer class="footer">
   <div class="content has-text-centered">
