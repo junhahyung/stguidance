@@ -398,17 +398,17 @@ video.addEventListener('loadeddata', () => {
     <!-- 이미지와 캡션 추가 -->
     <figure class="content has-text-centered" style="max-width: 800px; margin: 0 auto;">
       <img src="assets/STG_conceptual.jpg" alt="Comparison between CFG and STG" style="width: 100%; height: auto; margin: 20px 0; border-radius: 10px;">
-      <figcaption style="font-size: 0.9rem; color: #666; margin-top: 10px;">
-        Comparison between CFG and STG. STG aligns the weak and main models along the direction of increasing quality, while CFG models differ not only in quality but also in aspects like diversity and prompt alignment.
+      <figcaption style="font-size: 0.85rem; color: #666; margin-top: 10px;">
+        Comparison between CFG and STG, with the band conceptually representing the noisy data manifold.
       </figcaption>
     </figure>
 
     <div class="abstract-container">
       <p class="content has-text-justified">
-        Spatiotemporal Skip Guidance (STG) enhances the generated video quality by selectively skipping residual blocks or attention layers during the video generation process. This skipping mechanism simplifies the model output, producing aligned and coherent frames while maintaining diversity and dynamic properties.
+        Spatiotemporal Skip Guidance (STG) improves video quality by selectively skipping residual blocks or attention layers. This approach simplifies outputs while preserving frame diversity and dynamics.
       </p>
       <p class="content has-text-justified">
-        <strong>Residual Skip:</strong> To skip an entire residual block, the output is modified as follows:
+        <strong>Residual Skip:</strong> Skips entire residual blocks:
       </p>
       <p class="content has-text-centered">
         \[
@@ -417,7 +417,7 @@ video.addEventListener('loadeddata', () => {
         \]
       </p>
       <p class="content has-text-justified">
-        <strong>Attention Skip:</strong> In self-attention, the computation of value tensors is adjusted as:
+        <strong>Attention Skip:</strong> Adjusts self-attention to simplify computation:
       </p>
       <p class="content has-text-centered">
         \[
@@ -425,7 +425,7 @@ video.addEventListener('loadeddata', () => {
         \]
       </p>
       <p class="content has-text-justified">
-        By introducing these simple yet effective modifications, STG avoids the need for additional training or auxiliary models, achieving high-quality video synthesis efficiently.
+        STG achieves high-quality synthesis without extra models or training, making it efficient and effective.
       </p>
     </div>
   </div>
