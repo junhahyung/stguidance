@@ -390,6 +390,33 @@ video.addEventListener('loadeddata', () => {
     </div>
   </div>
 </section>
+
+<section class="section">
+  <div class="custom-container">
+    <h2 class="title is-3 has-text-centered">STG Enhancement Details</h2>
+    <div class="abstract-container">
+      <p class="content has-text-justified">
+        Spatiotemporal Skip Guidance (STG) enhances the generated video quality by selectively skipping residual blocks or attention layers during the video generation process. 
+      </p>
+      <p class="content has-text-justified">
+        <strong>Residual Skip:</strong> To skip an entire residual block, the output is modified as follows:
+      </p>
+      <p class="content has-text-centered">
+        Res(<i>z<sub>l</sub></i>) = <i>z<sub>l+1</sub></i> = <i>f<sub>l</sub>(z<sub>l</sub>) + z<sub>l</sub></i>,<br>
+        Res′(<i>z<sub>l</sub></i>) = <i>z<sub>l+1</sub></i> = <i>z<sub>l</sub></i>.
+      </p>
+      <p class="content has-text-justified">
+        <strong>Attention Skip:</strong> In self-attention, the computation of value tensors is adjusted as:
+      </p>
+      <p class="content has-text-centered">
+        SA(<i>Q, K, V</i>) = Softmax(<i>QK<sup>T</sup> / √d</i>)<i>V</i> = <i>AV</i>.
+      </p>
+      <p class="content has-text-justified">
+        By introducing these simple yet effective modifications, STG avoids the need for additional training or auxiliary models, achieving high-quality video synthesis efficiently.
+      </p>
+    </div>
+  </div>
+</section>
   
 <footer class="footer">
   <div class="content has-text-centered">
