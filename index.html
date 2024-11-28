@@ -536,49 +536,6 @@ video.addEventListener('loadeddata', () => {
   </div>
 </section>
 
-<section class="section">
-  <div class="custom-container">
-    <h2 class="title is-3 has-text-centered">Animation</h2>
-    <!-- 새로운 하위 섹션 추가 -->
-    <section id="stg-animation" style="margin-top: 40px;">
-      <h3 class="title is-4 has-text-centered">STG Scale Transition</h3>
-      <p style="text-align: center;">As the scale increases, the frame becomes clearer. Use the slider below to see the effect.</p>
-      
-      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <!-- 이미지 행 -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
-          <div>
-            <img src="assets/scale/scale_1.jpg" alt="Start Frame" style="width: 30%; border: 2px solid #ccc;">
-            <p style="font-size: 0.9rem; color: #666;">Start scale (w=0)</p>
-          </div>
-          <img id="interpolated-frame" src="assets/scale/scale_1.jpg" alt="Interpolated Frame" style="width: 30%; border: 2px solid #ccc;">
-          <div>
-            <img src="assets/scale/scale_4.jpg" alt="End Frame" style="width: 30%; border: 2px solid #ccc;">
-            <p style="font-size: 0.9rem; color: #666;">End scale (w=2.0)</p>
-          </div>
-        </div>
-
-        <!-- 슬라이더 -->
-        <div style="margin: 20px 0;">
-          <input id="stg-slider" type="range" min="1" max="4" value="1" step="1" style="width: 100%;">
-        </div>
-      </div>
-    </section>
-  </div>
-</section>
-
-<script>
-  // STG Animation 관련 스크립트
-  (function () {
-    const slider = document.getElementById('stg-slider');
-    const interpolatedFrame = document.getElementById('interpolated-frame');
-
-    slider.addEventListener('input', () => {
-      const scaleValue = slider.value;
-      interpolatedFrame.src = `assets/scale/scale_${scaleValue}.jpg`;
-    });
-  })();
-</script>  
   
 <!-- MathJax 라이브러리 추가 -->
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
