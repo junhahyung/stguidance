@@ -394,16 +394,19 @@ video.addEventListener('loadeddata', () => {
 <section class="section">
   <div class="custom-container">
     <h2 class="title is-3 has-text-centered">STG Enhancement Details</h2>
+    
+    <!-- 이미지와 캡션 추가 -->
+    <figure class="content has-text-centered">
+      <img src="assets/STG_conceptual.jpg" alt="Comparison between CFG and STG" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 10px;">
+      <figcaption style="font-size: 1.1rem; color: #555; margin-top: 10px;">
+        Comparison between CFG and STG. STG aligns the weak and main models along the direction of increasing quality, while CFG models differ not only in quality but also in aspects like diversity and prompt alignment.
+      </figcaption>
+    </figure>
+
     <div class="abstract-container">
       <p class="content has-text-justified">
         Spatiotemporal Skip Guidance (STG) enhances the generated video quality by selectively skipping residual blocks or attention layers during the video generation process. This skipping mechanism simplifies the model output, producing aligned and coherent frames while maintaining diversity and dynamic properties.
       </p>
-      
-      <!-- 이미지 추가 -->
-      <div class="content has-text-centered">
-        <img src="assets/STG_conceptual.jpg" alt="STG Conceptual Diagram" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 10px;">
-      </div>
-
       <p class="content has-text-justified">
         <strong>Residual Skip:</strong> To skip an entire residual block, the output is modified as follows:
       </p>
