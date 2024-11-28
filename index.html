@@ -442,8 +442,99 @@ video.addEventListener('loadeddata', () => {
         User study results for STG on SVD and Mochi, using 700 prompts from EvalCrafter. The results demonstrate that incorporating STG leads to improved quality across all evaluated aspects.
       </figcaption>
     </figure>
+    
+    <!-- 표 1 추가 -->
+    <h3 class="title is-4 has-text-centered" style="margin-top: 30px;">Quantitative Results</h3>
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; text-align: center; border: 1px solid #ccc;">
+        <thead style="background-color: #f5f5f5;">
+          <tr>
+            <th>Models</th>
+            <th>Imaging Quality</th>
+            <th>Aesthetic Quality</th>
+            <th>Motion Smoothness</th>
+            <th>Dynamic Degree</th>
+            <th>Temporal Flickering</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mochi (CFG)</td>
+            <td>0.524</td>
+            <td>0.507</td>
+            <td>0.985</td>
+            <td>0.87</td>
+            <td>0.976</td>
+          </tr>
+          <tr>
+            <td>Mochi (STG)</td>
+            <td><strong>0.628</strong></td>
+            <td><strong>0.554</strong></td>
+            <td><strong>0.988</strong></td>
+            <td>0.86</td>
+            <td><strong>0.978</strong></td>
+          </tr>
+          <tr>
+            <td>Open-Sora (CFG)</td>
+            <td>0.561</td>
+            <td>0.493</td>
+            <td>0.982</td>
+            <td><strong>0.902</strong></td>
+            <td>0.975</td>
+          </tr>
+          <tr>
+            <td>Open-Sora (STG)</td>
+            <td><strong>0.606</strong></td>
+            <td><strong>0.509</strong></td>
+            <td><strong>0.987</strong></td>
+            <td>0.895</td>
+            <td>0.976</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="text-align: center; font-size: 0.85rem; color: #666;">Table 1. Quantitative results for Mochi and Open-Sora on VBench T2V benchmarks.</p>
+    </div>
+
+    <!-- 표 2 추가 -->
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; text-align: center; border: 1px solid #ccc;">
+        <thead style="background-color: #f5f5f5;">
+          <tr>
+            <th>Models</th>
+            <th>FVD (↓)</th>
+            <th>IS</th>
+            <th>Imaging Quality</th>
+            <th>Aesthetic Quality</th>
+            <th>Motion Smoothness</th>
+            <th>Dynamic Degree</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SVD (CFG)</td>
+            <td>151.3</td>
+            <td>38.0</td>
+            <td>0.687</td>
+            <td>0.637</td>
+            <td>0.966</td>
+            <td>0.562</td>
+          </tr>
+          <tr>
+            <td>SVD (STG)</td>
+            <td><strong>128.7</strong></td>
+            <td><strong>38.5</strong></td>
+            <td><strong>0.694</strong></td>
+            <td><strong>0.639</strong></td>
+            <td><strong>0.968</strong></td>
+            <td><strong>0.694</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="text-align: center; font-size: 0.85rem; color: #666;">Table 2. Quantitative results for SVD on FVD, IS, and VBench I2V benchmarks.</p>
+    </div>
   </div>
 </section>
+
   
 <!-- MathJax 라이브러리 추가 -->
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
