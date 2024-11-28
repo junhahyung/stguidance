@@ -433,18 +433,21 @@ video.addEventListener('loadeddata', () => {
 
 <section class="section">
   <div class="custom-container">
-    <h2 class="title is-3 has-text-centered">User Study</h2>
-    
-    <!-- 이미지와 캡션 추가 -->
+    <h2 class="title is-2 has-text-centered">Evaluation</h2>
+
+    <!-- User Study 섹션 -->
+    <h3 class="title is-4 has-text-centered" style="margin-top: 30px;">User Study</h3>
     <figure class="content has-text-centered" style="max-width: 800px; margin: 0 auto;">
       <img src="assets/radar_chart.png" alt="User Study Results" style="width: 100%; height: auto; margin: 20px 0; border: 2px solid #ccc;">
       <figcaption style="font-size: 0.85rem; color: #666; margin-top: 10px;">
-        User study results for STG on SVD and Mochi, using 700 prompts from EvalCrafter. The results demonstrate that incorporating STG leads to improved quality across all evaluated aspects.
+        User study results for STG on SVD and Mochi, using 700 prompts from EvalCrafter.
       </figcaption>
     </figure>
-    
-    <!-- 표 1 추가 -->
+
+    <!-- Quantitative Results 섹션 -->
     <h3 class="title is-4 has-text-centered" style="margin-top: 30px;">Quantitative Results</h3>
+
+    <!-- 표 1 -->
     <div style="overflow-x: auto;">
       <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; text-align: center; border: 1px solid #ccc;">
         <thead style="background-color: #f5f5f5;">
@@ -474,7 +477,8 @@ video.addEventListener('loadeddata', () => {
             <td>0.86</td>
             <td><strong>0.978</strong></td>
           </tr>
-          <tr>
+          <!-- 진한 경계선 추가 -->
+          <tr style="border-top: 3px solid #000;">
             <td>Open-Sora (CFG)</td>
             <td>0.561</td>
             <td>0.493</td>
@@ -495,7 +499,7 @@ video.addEventListener('loadeddata', () => {
       <p style="text-align: center; font-size: 0.85rem; color: #666;">Table 1. Quantitative results for Mochi and Open-Sora on VBench T2V benchmarks.</p>
     </div>
 
-    <!-- 표 2 추가 -->
+    <!-- 표 2 -->
     <div style="overflow-x: auto;">
       <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; text-align: center; border: 1px solid #ccc;">
         <thead style="background-color: #f5f5f5;">
