@@ -536,49 +536,6 @@ video.addEventListener('loadeddata', () => {
   </div>
 </section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Animation. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
-
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
-          </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./assets/scale/scale_1.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
-            </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="4" value="0" type="range">
-          </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./assets/scale/scale_4.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/>
-        <!--/ Interpolating. -->
-      </div>
-    </div>
-    <!--/ Animation. -->
   
 <!-- MathJax 라이브러리 추가 -->
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
