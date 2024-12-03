@@ -8,7 +8,7 @@
 
 ## Todos
 - Update README
-- Update STG with Open-Sora and SVD
+- Update STG with Open-Sora, SVD, and LTX-Video
 
 ## Acknowledgements
 The code for the Mochi model is based on [Mochi](https://github.com/genmoai/mochi?tab=readme-ov-file).
