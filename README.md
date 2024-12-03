@@ -1,9 +1,14 @@
 # Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling
 
-## Arxiv: [link](https://arxiv.org/abs/2411.18664)
+## Paper
+- Arxiv: [Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling](https://arxiv.org/abs/2411.18664)
 
-## Project Page: [link](https://junhahyung.github.io/STGuidance)
+## Project Page
+- [STG Project Page](https://junhahyung.github.io/STGuidance)
 
-Todos
-- update readme
-- update STG w/ Open-Sora and SVD
+## Todos
+- Update README
+- Update STG with Open-Sora and SVD
+
+## Acknowledgements
+The code for the Mochi model is based on [Mochi](https://github.com/genmoai/mochi?tab=readme-ov-file).
