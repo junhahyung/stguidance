@@ -415,63 +415,37 @@ def sample_model(device, dit, conditioning, **args):
             stg_block_idx = args["stg_block_idx"]
             stg_scale = args["stg_scale"]
 
-            if mode == "STG":
-                print(f"[INFO] ## STG Mode")
-                with torch.autocast("cuda", dtype=torch.bfloat16):
-                    out_cond = dit(z, sigma, False, -1, **cond_text)
-                    out_uncond = dit(z, sigma, False, -1, **cond_null)
-                    out_perturb = dit(z, sigma, True, stg_block_idx, **cond_text)
-            elif mode == "CFG":
+            if mode == "CFG":
                 print(f"[INFO] ## CFG Mode")
                 with torch.autocast("cuda", dtype=torch.bfloat16):
                     out_cond = dit(z, sigma, False, -1, **cond_text)
                     out_uncond = dit(z, sigma, False, -1, **cond_null)
-            elif mode == "Uncond":
-                print(f"[INFO] ## Uncond Mode")
-                with torch.autocast("cuda", dtype=torch.bfloat16):
-                    out_uncond = dit(z, sigma, False, -1, **cond_null)
-            elif mode == "PASS":
-                print(f"[INFO] ## PASS Mode")
+            elif mode == "STG-A":
+                print(f"[INFO] ## STG-A Mode")
                 with torch.autocast("cuda", dtype=torch.bfloat16):
                     out_cond = dit(z, sigma, False, -1, **cond_text)
                     out_uncond = dit(z, sigma, False, -1, **cond_null)
                     out_perturb = dit(z, sigma, True, stg_block_idx, **cond_text)
-            elif mode == "perturb_STG":
-                print(f"[INFO] ## perturb_STG Mode")
+            elif mode == "STG-R":
+                print(f"[INFO] ## STG-R Mode")
                 with torch.autocast("cuda", dtype=torch.bfloat16):
-                    # out_cond = dit(z, sigma, False, -1, **cond_text)
-                    # out_uncond = dit(z, sigma, False, -1, **cond_null)
-                    out_perturb = dit(z, sigma, True, stg_block_idx, **cond_text)
-            elif mode == "perturb_PASS":
-                print(f"[INFO] ## perturb_PASS Mode")
-                with torch.autocast("cuda", dtype=torch.bfloat16):
-                    # out_cond = dit(z, sigma, False, -1, **cond_text)
-                    # out_uncond = dit(z, sigma, False, -1, **cond_null)
+                    out_cond = dit(z, sigma, False, -1, **cond_text)
+                    out_uncond = dit(z, sigma, False, -1, **cond_null)
                     out_perturb = dit(z, sigma, True, stg_block_idx, **cond_text)
             else:
-                assert False, "Wrong Mode"
+                raise NotImplementedError
 
-        if mode == "Uncond":
-            out_uncond = out_uncond.to(z)
-        elif mode == "perturb_STG" or mode == "perturb_PASS":
-            out_perturb = out_perturb.to(z)
-            pass
-        else:
-            assert out_cond.shape == out_uncond.shape
-            out_uncond = out_uncond.to(z)
-            out_cond = out_cond.to(z)
+        assert out_cond.shape == out_uncond.shape
+        out_uncond = out_uncond.to(z)
+        out_cond = out_cond.to(z)
         
-        if mode == "STG" or mode == "PASS":
+        if mode == "STG-A" or mode == "STG-R":
             print(f"[INFO] cfg_scale: {cfg_scale}")
             print(f"[INFO] stg_scale: {stg_scale}")
             out_perturb = out_perturb.to(z)
 
-            if figure_mode:
-                return out_uncond, out_cond, out_perturb
-                
-            #---------------------Rescaling----------------------#
+        #---------------------Rescaling----------------------#
             if args["do_rescaling"]:
-                assert not figure_mode
                 rescaling_scale = args["rescaling_scale"]
                 print(f"[INFO] Rescaled with scale: {rescaling_scale}")
                 output = out_uncond + cfg_scale * (out_cond - out_uncond) \
@@ -480,7 +454,7 @@ def sample_model(device, dit, conditioning, **args):
                 factor = rescaling_scale * factor + (1 - rescaling_scale)
                 output = output * factor
                 return output
-            #----------------------------------------------------#
+        #----------------------------------------------------#
 
             return out_uncond + cfg_scale * (out_cond - out_uncond) \
                               + stg_scale * (out_cond - out_perturb)
@@ -488,80 +462,23 @@ def sample_model(device, dit, conditioning, **args):
             print(f"[INFO] cfg_scale: {cfg_scale}")
         #---------------------Rescaling----------------------#
             if args["do_rescaling"]:
-                raise NotImplementedError
+                rescaling_scale = args["rescaling_scale"]
+                print(f"[INFO] Rescaled with scale: {rescaling_scale}")
+                output = out_uncond + cfg_scale * (out_cond - out_uncond)
+                factor = out_cond.std() / output.std()
+                factor = rescaling_scale * factor + (1 - rescaling_scale)
+                output = output * factor
+                return output
         #----------------------------------------------------#
             return out_uncond + cfg_scale * (out_cond - out_uncond)
-        elif mode == "Uncond":
-            return out_uncond
-        elif mode == "perturb_STG":
-            return out_perturb
-        elif mode == "perturb_PASS":
-            return out_perturb
 
-    figure_mode = args["figure_mode"]
-    figure_idx = args["figure_idx"]
-    figure_start_idx = args["figure_start_idx"]
-    latent_dir = "/scratch/slurm-user25-kaist/user/kinamkim/models/figure/latents"
-    os.makedirs(latent_dir, exist_ok=True)
-    figure_latent_path = f"/scratch/slurm-user25-kaist/user/kinamkim/models/figure/latents/latents_{figure_start_idx}.pt"
-    latent_exist = os.path.exists(figure_latent_path)
+    stg_block_idx = args["stg_block_idx"]
+    stg_scale = args["stg_scale"]
 
-    if figure_mode and latent_exist:
-        z = torch.load(figure_latent_path)
-        print(f"Loaded latents at step {figure_start_idx}")
     # Euler sampler w/ customizable sigma schedule & cfg scale
     for i in get_new_progress_bar(range(0, sample_steps), desc="Sampling"):
-        if figure_mode and latent_exist and i < figure_start_idx:
-            continue
-        if figure_mode:
-            latent_path = f"/scratch/slurm-user25-kaist/user/kinamkim/models/figure/latents/latents_{i}.pt"
-            if not os.path.exists(latent_path):
-                torch.save(z, latent_path)
-                print(f"Latents at step {i} saved")
-
-        local_rank = args["local_rank"]
-        print(f"i: {i}") if local_rank == 0 else None
         sigma = sigma_schedule[i]
         dsigma = sigma - sigma_schedule[i + 1]
-
-        if figure_mode and i == figure_idx:
-            print(f"## Figure Mode")
-            out_uncond, out_cond, out_perturb = model_fn(
-                z=z,
-                sigma=torch.full([B] if cond_text else [B * 2], sigma, device=z.device),
-                cfg_scale=cfg_schedule[i],
-                figure_mode=True,
-            )
-            stg_scale = args["stg_scale"]
-            full_dsigma = sigma - sigma_schedule[-1]
-            pred_z0_org = z
-            pred_z0_cond = z + full_dsigma * out_cond
-            pred_z0_uncond = z + full_dsigma * out_uncond
-            pred_z0_perturb = z + full_dsigma * out_perturb
-            pred_z0_cfg = z + full_dsigma * (out_uncond + cfg_schedule[i] * (out_cond - out_uncond))
-            pred_z0_pass = z + full_dsigma * (out_uncond + stg_scale * (out_cond - out_perturb))
-            pred_z0_total = z + full_dsigma * (out_uncond + cfg_schedule[i] * (out_cond - out_uncond) +
-                                                + stg_scale * (out_cond - out_perturb))
-            
-            pred_z0_perturb_diff = z + full_dsigma * (out_cond - out_perturb)
-            pred_z0_uncond_diff = z + full_dsigma * (out_cond - out_perturb)
-
-            # pred_z0_list = [pred_z0_perturb, pred_z0_uncond, pred_z0_cond, pred_z0_pass, pred_z0_cfg, pred_z0_total]
-            pred_z0_list = [pred_z0_pass]
-            assert not cond_batched
-
-            result_list = []
-            # print(f"pred_zo_list length: {len(pred_z0_list)}")
-            for z in pred_z0_list:
-                z = z.detach()  # 그래프 연결 방지
-                with torch.no_grad():  # 추적 방지
-                    result = dit_latents_to_vae_latents(z)  # 처리
-                    result_list.append(result)  # 처리 결과 저장
-
-                # 처리 후 GPU 메모리 해제
-                del z
-                torch.cuda.empty_cache()  # GPU 캐시 비우기
-            return result_list
 
         # `pred` estimates `z_0 - eps`.
         pred = model_fn(
@@ -709,7 +626,7 @@ class MultiGPUContext:
         print(f"Initializing rank {local_rank+1}/{world_size}")
         assert world_size > 1, f"Multi-GPU mode requires world_size > 1, got {world_size}"
         os.environ["MASTER_ADDR"] = "127.0.0.1"
-        os.environ["MASTER_PORT"] = os.getenv('MASTER_PORT', '29500')
+        os.environ["MASTER_PORT"] = "29502"
         with t("init_process_group"):
             dist.init_process_group(
                 "nccl",
@@ -774,26 +691,7 @@ class MochiMultiGPUPipeline:
                 #--------------------RESTART---------------------#
                 kwargs["local_rank"] = ctx.local_rank
                 #------------------------------------------------#
-                figure_mode = kwargs["figure_mode"] 
-
-                if figure_mode:
-                    frames_list = []
-                    latents_list = sample_model(ctx.device, ctx.dit, conditioning=conditioning, **kwargs)
-                    # print(f"latents list length: {len(latents_list)}")
-                    for latents in latents_list:
-                        # latents를 GPU에서 처리
-                        latents = latents.detach()  # 그래프 연결 방지
-                        with torch.no_grad():  # 추적 방지
-                            frames = decode_latents(ctx.decoder, latents)  # 디코딩
-
-                        # 결과를 CPU로 이동해 numpy 배열로 변환 후 저장
-                        frames_list.append(frames.cpu().numpy())
-
-                        # 메모리 해제
-                        del frames, latents
-                        torch.cuda.empty_cache()  # GPU 캐시 비우기
-                    return frames_list
-
+                
                 latents = sample_model(ctx.device, ctx.dit, conditioning=conditioning, **kwargs)
                 if ctx.local_rank == 0:
                     torch.save(latents, "latents.pt")

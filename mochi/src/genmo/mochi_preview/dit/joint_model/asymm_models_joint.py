@@ -404,7 +404,7 @@ class AsymmetricJointBlock(nn.Module):
             x: (B, N, dim) tensor of visual tokens after block
             y: (B, L, dim) tensor of text tokens after block
         """
-        if perturb_mode == "PASS":
+        if perturb_mode == "STG-R":
             return x, y
 
         N = x.size(1)
@@ -419,7 +419,7 @@ class AsymmetricJointBlock(nn.Module):
         else:
             scale_msa_y = mod_y
 
-        if perturb_mode == "STG":
+        if perturb_mode == "STG-A":
             # Self-attention block.
             x_attn, y_attn = self.attn(
                 x,
@@ -685,18 +685,18 @@ class AsymmDiTJoint(nn.Module):
         if is_perturbed:
             if isinstance(stg_block_idx, int):
                 stg_block_idx = stg_block_idx
-                perturb_mode = "STG"
+                perturb_mode = "STG-A"
             else:
-                assert "pass" in stg_block_idx
+                assert "residual" in stg_block_idx
                 stg_block_idx = int(stg_block_idx.split('_')[-1])
-                perturb_mode = "PASS"
+                perturb_mode = "STG-R"
         else:
             perturb_mode = "None"
         
 
         for i, block in enumerate(self.blocks):
-            if i == stg_block_idx and perturb_mode == "STG":
-                print(f"[INFO] STG applied in {i}th block")
+            if i == stg_block_idx and perturb_mode == "STG-A":
+                print(f"[INFO] STG-A applied in {i}th block")
                 x, y_feat = block(
                     x,
                     c,
@@ -706,8 +706,8 @@ class AsymmDiTJoint(nn.Module):
                     rope_sin=rope_sin,
                     packed_indices=packed_indices,
                 )  # (B, M, D), (B, L, D)
-            elif i == stg_block_idx and perturb_mode == "PASS":
-                print(f"[INFO] PASS applied in {i}th block")
+            elif i == stg_block_idx and perturb_mode == "STG-R":
+                print(f"[INFO] STG-R applied in {i}th block")
                 x, y_feat = block(
                     x,
                     c,

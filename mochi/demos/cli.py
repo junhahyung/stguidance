@@ -34,7 +34,7 @@ def configure_model(model_dir_path_, cpu_offload_):
 
 def load_model():
     os.environ['MASTER_ADDR'] = '127.0.0.1'
-    os.environ['MASTER_PORT'] = os.getenv('MASTER_PORT', '29500')
+    os.environ['MASTER_PORT'] = "29502"
     global num_gpus, pipeline, model_dir_path
     if pipeline is None:
         MOCHI_DIR = model_dir_path
@@ -78,10 +78,6 @@ def generate_video(
     num_restarts,
     max_idx,
     num_intervals,
-#------------------------------------#
-    figure_mode,
-    figure_idx,
-    figure_start_idx,
 #-------------Rescaling--------------#
     do_rescaling,
     rescaling_scale,
@@ -122,9 +118,6 @@ def generate_video(
         "max_idx": max_idx,
         "num_intervals": num_intervals,
         #---------------------------#
-        "figure_mode": figure_mode,
-        "figure_idx": figure_idx,
-        "figure_start_idx": figure_start_idx,
         #---------Rescaling---------#
         "do_rescaling": do_rescaling,
         "rescaling_scale": rescaling_scale,
@@ -134,28 +127,9 @@ def generate_video(
     with progress_bar(type="tqdm"):
         final_frames = pipeline(**args)
 
-        if figure_mode:
-            print(f"Length: {len(final_frames)}")
-            mode_list = ["perturb", "uncond", "cond", "pass", "cfg", "total", "diff_perturb", "diff_uncond"]
-            mode_list = ["pass"]
-            for i, frames in enumerate(final_frames):
-                frames = frames[0]
-                output_path = f"{video_path[:-4]}_idx_{figure_idx}_{mode_list[i]}.mp4"
-                save_video(frames, output_path)
-            frames_perturb_diff = final_frames[2][0] - final_frames[0][0]
-            frames_uncond_diff = final_frames[2][0] - final_frames[1][0]
-            output_path = f"{video_path[:-4]}_idx_{figure_idx}_diff_perturb.mp4"
-            save_video(frames_perturb_diff, output_path)
-            output_path = f"{video_path[:-4]}_idx_{figure_idx}_diff_uncond.mp4"
-            save_video(frames_uncond_diff, output_path)
-            assert False, "Stop here"
-            return output_path
-
         assert isinstance(final_frames, np.ndarray)
         assert final_frames.dtype == np.float32
         final_frames = final_frames[0]
-        os.makedirs("outputs", exist_ok=True)
-        output_path = os.path.join("outputs", f"output_{int(time.time())}.mp4")
         output_path=video_path
         save_video(final_frames, output_path)
         json_path = os.path.splitext(output_path)[0] + ".json"
@@ -175,123 +149,128 @@ The even lighting enhances the vibrant colors and creates a fresh,
 inviting atmosphere.
 """)
 
-@click.command()
-@click.option("--prompt", default=DEFAULT_PROMPT, help="Prompt for video generation.")
-@click.option("--negative_prompt", default="", help="Negative prompt for video generation.")
-@click.option("--width", default=800, type=int, help="Width of the video.")
-@click.option("--height", default=480, type=int, help="Height of the video.")
-@click.option("--num_frames", default=91, type=int, help="Number of frames.")
-@click.option("--seed", default=1710977262, type=int, help="Random seed.")
-@click.option("--cfg_scale", default=4.5, type=float, help="CFG Scale.")
-@click.option("--num_steps", default=64, type=int, help="Number of inference steps.")
-@click.option("--model_dir", required=True, help="Path to the model directory.")
-@click.option("--cpu_offload", is_flag=True, help="Whether to offload model to CPU")
-def generate_cli(
-    prompt, negative_prompt, width, height, num_frames, seed, cfg_scale, num_steps, model_dir, cpu_offload
-):
-    configure_model(model_dir, cpu_offload)
-
+def generate_cli():
     import os
     import re
+    import importlib
 
+    import importlib.util
+    import sys
+
+    # Define the path to the config file
+    config_path = "demos/config.py"
+
+    # Get the absolute path to the config file
+    config_file = os.path.abspath(config_path)
+
+    # Check if the config file exists
+    if not os.path.exists(config_file):
+        raise FileNotFoundError(f"Config file not found: {config_file}")
+
+    # Load the config file as a module
+    spec = importlib.util.spec_from_file_location("config", config_file)
+    config_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(config_module)
+
+    # Ensure only one of prompt or prompts_path is provided
+    if not config_module.prompt and not config_module.prompts_path:
+        raise ValueError("You must provide either 'prompt' or 'prompts_path' in the config.")
+
+    if config_module.prompt and config_module.prompts_path:
+        raise ValueError("You can provide only one of 'prompt' or 'prompts_path', not both.")
+
+    # Get prompts from config
+    if config_module.prompts_path:
+        # Read prompts from the prompts.txt file
+        with open(config_module.prompts_path, 'r') as f:
+            prompts = f.readlines()
+
+        # Remove any trailing newline characters from each prompt
+        prompts = [prompt.strip() for prompt in prompts]
+    else:
+        # If prompt is provided, create a list with the prompt
+        prompts = [config_module.prompt.strip()]
+
+    # Function to sanitize filenames
     def sanitize_filename(filename):
-        # 특수 문자를 제거하고 공백을 밑줄로 대체
+        # Remove special characters and replace spaces with underscores
         filename = re.sub(r'[<>:"/\\|?*]', '', filename)
         filename = filename.replace(' ', '_')
-        # 길이 제한 (필요에 따라 조정 가능)
         return filename[:50]
 
-    # Block length: 48
-    #--------------Option-------------#
-    mode = "PASS" # CFG / STG / Uncond / PASS / perturb_STG / perturb_PASS
-    # stg_block_idx=[30, 32, 35,]
-    # stg_scale=[1.0, 2.0]
-    stg_block_idx=[35]
-    stg_scale=[0.8]
-    #---------------------------------#
-    #----------Rescaling--------#
-    do_rescaling = True
-    rescaling_scale = 0.7
-    #---------------------------#
-    #----------SAMPLE-----------#
-    sample_mode = False
-    #----------FIGURE-----------#
-    figure_mode = False
-    figure_idx = 37
-    figure_start_idx = 37
-    #----------RESTART----------#
-    do_restart = False # True or False
-    restart_idx = 63
-    num_restarts = 1
-    max_idx = 1
-    num_intervals = -1
-    #---------------------------#
+    negative_prompt = ""
 
-    if mode == "CFG" or mode == "Uncond":
-        stg_block_idx=[-1]
-        stg_scale = [0.0]
+    # Load configuration options from the config file
+    mode = config_module.mode
+    stg_block_idx = config_module.stg_block_idx
+    stg_scale = config_module.stg_scale
 
-    # Set paths and create directories
-    # prompt_path = "/scratch/slurm-user25-kaist/user/kinamkim/models/filtered_quotes.txt"
-    prompt_path = "/scratch/slurm-user25-kaist/user/kinamkim/models/prompt.txt"
-    experiment_dir = "experiment"
-    if figure_mode:
-        prompt_path = "/scratch/slurm-user25-kaist/user/kinamkim/models/figure_prompt.txt"
-        experiment_dir = "figure"
-        
-    if sample_mode:
-        prompt_path = "/scratch/slurm-user25-kaist/user/kinamkim/models/sample_prompt.txt"
-        experiment_dir = "sample"
-        assert not figure_mode
-        
+    # Rescaling options
+    do_rescaling = config_module.do_rescaling
+    rescaling_scale = config_module.rescaling_scale
+
+    # Restart options
+    do_restart = config_module.do_restart
+    restart_idx = config_module.restart_idx
+    num_restarts = config_module.num_restarts
+    max_idx = config_module.max_idx
+    num_intervals = config_module.num_intervals
+
+    # CFG Scale and Steps
+    cfg_scale = config_module.cfg_scale
+    num_steps = config_module.num_steps
+
+    # Video generation options
+    width = config_module.width
+    height = config_module.height
+    num_frames = config_module.num_frames
+    seed = config_module.seed
+
+    # Model directory and CPU offload
+    model_dir = config_module.model_dir
+    cpu_offload = config_module.cpu_offload
+
+    # Configure the model using the provided config values
+    configure_model(model_dir, cpu_offload)
+
+    # Set the experiment directory and create directories for outputs
+    experiment_dir = "outputs"
     mode_dir = os.path.join(experiment_dir, mode)
 
-    # Create experiment/CFG directories if they do not exist
-    os.makedirs(mode_dir, exist_ok=True)
-
-    # Read prompts from the prompts.txt file
-    with open(prompt_path, 'r') as f:
-        prompts = f.readlines()
-
-    # Remove any trailing newline characters from each prompt
-    prompts = [prompt.strip() for prompt in prompts]
+    # os.makedirs(mode_dir, exist_ok=True)
 
     # Iterate over prompts and generate videos
     for i, prompt in enumerate(prompts):
         sanitized_prompt = sanitize_filename(prompt)  # 파일 이름에 사용할 수 있도록 프롬프트를 변환
         for scale in stg_scale:
             for idx in stg_block_idx:
-                if "PASS" in mode:  # PASS or perturb_PASS 모드 확인
-                    curr_idx = f"pass_{idx}"
+                if "STG-R" in mode:  # STG-R or perturb_PASS 모드 확인
+                    curr_idx = f"residual_{idx}"
                 else:
                     curr_idx = idx
 
-                if mode == "STG" or mode == "PASS":
+                if mode == "STG-A" or mode == "STG-R":
                     stg_dir = os.path.join(mode_dir, f"idx_{idx}_scale_{scale}")
                     #----------RESTART----------#
                     if do_restart:
                         video_dir = f"{stg_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
                     else:
                         video_dir = stg_dir
-                    # os.makedirs(stg_dir, exist_ok=True)
-                    # video_path = os.path.join(stg_dir, f"{sanitized_prompt}.mp4")
-                    os.makedirs(video_dir, exist_ok=True)
+
+                    if not do_rescaling:
+                        os.makedirs(video_dir, exist_ok=True)
                     video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
                     #--------------------------#
-                elif mode == "perturb_STG" or mode == "perturb_PASS":
-                    stg_dir = os.path.join(mode_dir, f"idx_{idx}")
-                    os.makedirs(stg_dir, exist_ok=True)
-                    video_path = os.path.join(stg_dir, f"{sanitized_prompt}.mp4")
-                elif mode == "CFG" or mode == "Uncond":
+                elif mode == "CFG":
                     #----------RESTART----------#
                     if do_restart:
                         restart_dir = f"{mode_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
-                        os.makedirs(restart_dir, exist_ok=True)
                         video_dir = restart_dir
                     else:
                         video_dir = mode_dir
-                    # video_path = os.path.join(mode_dir, f"{sanitized_prompt}.mp4")
                     video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
+                    if not do_rescaling:
+                        os.makedirs(video_dir, exist_ok=True)
                     #--------------------------#
 
                 #-------------Rescaling--------------#
@@ -336,10 +315,6 @@ def generate_cli(
                     num_restarts,
                     max_idx,
                     num_intervals,
-                    #---------------------------#
-                    figure_mode,
-                    figure_idx,
-                    figure_start_idx,
                     #---------Rescaling---------#
                     do_rescaling,
                     rescaling_scale,

@@ -1,0 +1,12 @@
+weights/
+*.safetensors
+.cache
+.venv
+.venv_test
+dist
+__pycache__
+mochi.egg-info
+genmo.egg-info
+outputs
+build
+.ruff_cache
