@@ -116,10 +116,18 @@ def attention(
             )
             print(f"q_perturb: {q_perturb.shape}")
             print(f"txt_len: {txt_len}")
-            assert 0
+            seq_len = q_perturb.shape[1]
+            identity_block_size = seq_len - txt_len
+            full_mask = torch.zeros((seq_len, seq_len), dtype=q_perturb.dtype, device=q_perturb.device)
+            full_mask[:identity_block_size, :identity_block_size] = float("-inf")
+            full_mask[:identity_block_size, :identity_block_size].fill_diagonal_(0)
+            
+            full_mask = full_mask.unsqueeze(0).unsqueeze(0)
+            print(f"full_mask: {full_mask.shape}")
             x_perturb = F.scaled_dot_product_attention(
-                q_perturb, k_perturb, v_perturb, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
+                q_perturb, k_perturb, v_perturb, attn_mask=full_mask, dropout_p=drop_rate, is_causal=causal
             )
+            assert 0, "reached here"
 
         x = F.scaled_dot_product_attention(
             q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
