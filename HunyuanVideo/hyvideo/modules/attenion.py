@@ -66,6 +66,7 @@ def attention(
     max_seqlen_q=None,
     max_seqlen_kv=None,
     batch_size=1,
+    do_stg=False,
     txt_len=-1,
 ):
     """
@@ -101,7 +102,7 @@ def attention(
         if attn_mask is not None and attn_mask.dtype != torch.bool:
             attn_mask = attn_mask.to(q.dtype)
         
-        if q.shape[0] == 3: # STG-A mode
+        if do_stg:
             q_uncond, q_cond, q_perturb = q.chunk(3, dim=0)
             k_uncond, k_cond, k_perturb = k.chunk(3, dim=0)
             v_uncond, v_cond, v_perturb = v.chunk(3, dim=0)
@@ -110,8 +111,6 @@ def attention(
             k = torch.cat([k_uncond, k_cond], dim=0)
             v = torch.cat([v_uncond, v_cond], dim=0)
             
-            attn_mask = torch.cat([attn_mask[:2]], dim=0)
-
             x = F.scaled_dot_product_attention(
                 q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
             )

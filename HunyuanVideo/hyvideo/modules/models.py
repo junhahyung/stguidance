@@ -350,8 +350,7 @@ class MMSingleStreamBlock(nn.Module):
             cu_seqlens_q.shape[0] == 2 * x.shape[0] + 1
         ), f"cu_seqlens_q.shape:{cu_seqlens_q.shape}, x.shape[0]:{x.shape[0]}"
         
-        if q.shape[0] == 3:
-            assert self.stg_mode is not None
+        if self.stg_mode is not None:
             if self.stg_mode == "STG-R":
                 q = torch.cat([q[:2]], dim=0)
                 k = torch.cat([k[:2]], dim=0)
@@ -365,6 +364,7 @@ class MMSingleStreamBlock(nn.Module):
                     max_seqlen_q=max_seqlen_q,
                     max_seqlen_kv=max_seqlen_kv,
                     batch_size=x.shape[0],
+                    stg_mode=self.stg_mode,
                     txt_len=txt_len,
                 )
         assert 0
