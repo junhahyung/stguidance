@@ -66,6 +66,7 @@ def attention(
     max_seqlen_q=None,
     max_seqlen_kv=None,
     batch_size=1,
+    txt_len=-1,
 ):
     """
     Perform QKV self attention.
@@ -94,12 +95,19 @@ def attention(
     k = pre_attn_layout(k)
     v = pre_attn_layout(v)
 
+    assert mode == "torch", "only torch attn supported when using STG"
+
     if mode == "torch":
         if attn_mask is not None and attn_mask.dtype != torch.bool:
             attn_mask = attn_mask.to(q.dtype)
+        
+        if q.shape[0] == 3: # STG-A mode
+            q_uncond, 
+
         x = F.scaled_dot_product_attention(
             q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
         )
+
     elif mode == "flash":
         x = flash_attn_varlen_func(
             q,

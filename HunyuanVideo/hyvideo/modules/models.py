@@ -315,6 +315,7 @@ class MMSingleStreamBlock(nn.Module):
         max_seqlen_q: Optional[int] = None,
         max_seqlen_kv: Optional[int] = None,
         freqs_cis: Tuple[torch.Tensor, torch.Tensor] = None,
+        stg_mode: str = None,
     ) -> torch.Tensor:
         mod_shift, mod_scale, mod_gate = self.modulation(vec).chunk(3, dim=-1)
         x_mod = modulate(self.pre_norm(x), shift=mod_shift, scale=mod_scale)
@@ -345,18 +346,23 @@ class MMSingleStreamBlock(nn.Module):
             cu_seqlens_q.shape[0] == 2 * x.shape[0] + 1
         ), f"cu_seqlens_q.shape:{cu_seqlens_q.shape}, x.shape[0]:{x.shape[0]}"
         
-        print(f"q.shape: {q.shape}, k.shape: {k.shape}, v.shape: {v.shape}")
-        print(f"cu_seqlens_q.shape: {cu_seqlens_q.shape}, cu_seqlens_kv.shape: {cu_seqlens_kv.shape}")
-
         if q.shape[0] == 3:
-            print(f"STG Mode Detected!")
-            print(f"q.shape: {q.shape}, k.shape: {k.shape}, v.shape: {v.shape}")
-            print(f"cu_seqlens_q.shape: {cu_seqlens_q.shape}, cu_seqlens_kv.shape: {cu_seqlens_kv.shape}")
-            q = torch.cat(q[:2], dim=0)
-            k = torch.cat(k[:2], dim=0)
-            v = torch.cat(v[:2], dim=0)
-            assert 0
-            
+            assert stg_mode is not None
+            if stg_mode == "STG-R":
+                q = torch.cat([q[:2]], dim=0)
+                k = torch.cat([k[:2]], dim=0)
+                v = torch.cat([v[:2]], dim=0)
+                attn = attention(
+                    q,
+                    k,
+                    v,
+                    cu_seqlens_q=cu_seqlens_q,
+                    cu_seqlens_kv=cu_seqlens_kv,
+                    max_seqlen_q=max_seqlen_q,
+                    max_seqlen_kv=max_seqlen_kv,
+                    batch_size=x.shape[0],
+                    txt_len=txt_len,
+                )
         assert 0
 
         attn = attention(
