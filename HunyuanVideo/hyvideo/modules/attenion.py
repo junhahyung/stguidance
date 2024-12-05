@@ -110,6 +110,8 @@ def attention(
             k = torch.cat([k_uncond, k_cond], dim=0)
             v = torch.cat([v_uncond, v_cond], dim=0)
             
+            attn_mask = torch.cat([attn_mask[:2]], dim=0)
+
             x = F.scaled_dot_product_attention(
                 q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
             )
