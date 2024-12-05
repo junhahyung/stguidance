@@ -19,7 +19,7 @@ This project is built upon the following works:
 1. **Mochi**
    - For installation and requirements, refer to the [official repository](https://github.com/genmoai/mochi).
      
-   - Update `config.py` with your desired settings and simply run:
+   - Update `demos/config.py` with your desired settings and simply run:
      ```bash
      python ./demos/cli.py
      ```
