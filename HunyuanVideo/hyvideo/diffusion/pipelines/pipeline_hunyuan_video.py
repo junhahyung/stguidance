@@ -703,6 +703,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         enable_tiling: bool = False,
         n_tokens: Optional[int] = None,
         embedded_guidance_scale: Optional[float] = None,
+        stg_mode: Optional[str] = None,
         stg_scale: float = 0.0,
         **kwargs,
     ):
@@ -833,10 +834,10 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         self._interrupt = False
         self._stg_scale = stg_scale
 
-        print(f"cfg scale: {guidance_scale}")
-        print(f"cfg: {self.do_classifier_free_guidance}")
-        print(f"stg scale: {stg_scale}")
-        print(f"stg: {self.do_spatio_temporal_guidance}")
+        if self.do_spatio_temporal_guidance:
+            self.transformer.stg_mode = stg_mode
+        else:
+            self.transformer.stg_mode = None
 
         # 2. Define call parameters
         if prompt is not None and isinstance(prompt, str):

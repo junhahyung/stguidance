@@ -254,6 +254,7 @@ class MMSingleStreamBlock(nn.Module):
         qk_scale: float = None,
         dtype: Optional[torch.dtype] = None,
         device: Optional[torch.device] = None,
+        stg_mode: Optional[str] = None,
     ):
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
@@ -265,6 +266,7 @@ class MMSingleStreamBlock(nn.Module):
         mlp_hidden_dim = int(hidden_size * mlp_width_ratio)
         self.mlp_hidden_dim = mlp_hidden_dim
         self.scale = qk_scale or head_dim ** -0.5
+        self.stg_mode = stg_mode
 
         # qkv and mlp_in
         self.linear1 = nn.Linear(
@@ -315,7 +317,6 @@ class MMSingleStreamBlock(nn.Module):
         max_seqlen_q: Optional[int] = None,
         max_seqlen_kv: Optional[int] = None,
         freqs_cis: Tuple[torch.Tensor, torch.Tensor] = None,
-        stg_mode: str = None,
     ) -> torch.Tensor:
         mod_shift, mod_scale, mod_gate = self.modulation(vec).chunk(3, dim=-1)
         x_mod = modulate(self.pre_norm(x), shift=mod_shift, scale=mod_scale)
@@ -328,6 +329,9 @@ class MMSingleStreamBlock(nn.Module):
         # Apply QK-Norm if needed.
         q = self.q_norm(q).to(v)
         k = self.k_norm(k).to(v)
+
+        print(f"<freq> q.shape: {q.shape}")
+        print(f"<freq> txt_len: {txt_len}")
 
         # Apply RoPE if needed.
         if freqs_cis is not None:
@@ -347,8 +351,8 @@ class MMSingleStreamBlock(nn.Module):
         ), f"cu_seqlens_q.shape:{cu_seqlens_q.shape}, x.shape[0]:{x.shape[0]}"
         
         if q.shape[0] == 3:
-            assert stg_mode is not None
-            if stg_mode == "STG-R":
+            assert self.stg_mode is not None
+            if self.stg_mode == "STG-R":
                 q = torch.cat([q[:2]], dim=0)
                 k = torch.cat([k[:2]], dim=0)
                 v = torch.cat([v[:2]], dim=0)
@@ -473,6 +477,7 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
 
         self.text_states_dim = args.text_states_dim
         self.text_states_dim_2 = args.text_states_dim_2
+        self.stg_mode = None
 
         if hidden_size % heads_num != 0:
             raise ValueError(
@@ -554,6 +559,7 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
                     mlp_act_type=mlp_act_type,
                     qk_norm=qk_norm,
                     qk_norm_type=qk_norm_type,
+                    stg_mode=self.stg_mode,
                     **factory_kwargs,
                 )
                 for _ in range(mm_single_blocks_depth)
