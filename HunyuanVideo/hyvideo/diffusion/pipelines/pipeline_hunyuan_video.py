@@ -892,7 +892,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         # For classifier free guidance, we need to do two forward passes.
         # Here we concatenate the unconditional and text embeddings into a single batch
         # to avoid doing two forward passes
-        if self.do_classifier_free_guidance:
+        if self.do_classifier_free_guidance and not self.do_spatio_temporal_guidance:
             prompt_embeds = torch.cat([negative_prompt_embeds, prompt_embeds])
             if prompt_mask is not None:
                 prompt_mask = torch.cat([negative_prompt_mask, prompt_mask])
@@ -900,7 +900,22 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                 prompt_embeds_2 = torch.cat([negative_prompt_embeds_2, prompt_embeds_2])
             if prompt_mask_2 is not None:
                 prompt_mask_2 = torch.cat([negative_prompt_mask_2, prompt_mask_2])
-
+        elif self.do_classifier_free_guidance and self.do_spatio_temporal_guidance:
+            prompt_embeds = torch.cat(
+                [negative_prompt_embeds, prompt_embeds, prompt_embeds]
+            )
+            if prompt_mask is not None:
+                prompt_mask = torch.cat([negative_prompt_mask, prompt_mask, prompt_mask])
+            if prompt_embeds_2 is not None:
+                prompt_embeds_2 = torch.cat(
+                    [negative_prompt_embeds_2, prompt_embeds_2, prompt_embeds_2]
+                )
+            if prompt_mask_2 is not None:
+                prompt_mask_2 = torch.cat(
+                    [negative_prompt_mask_2, prompt_mask_2, prompt_mask_2]
+                )
+        else:
+            raise NotImplementedError
 
         # 4. Prepare timesteps
         extra_set_timesteps_kwargs = self.prepare_extra_func_kwargs(
@@ -964,7 +979,9 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                 # expand the latents if we are doing classifier free guidance
                 latent_model_input = (
                     torch.cat([latents] * 2)
-                    if self.do_classifier_free_guidance
+                    if self.do_classifier_free_guidance and not self.do_spatio_temporal_guidance
+                    else torch.cat([latents] * 3)
+                    if self.do_classifier_free_guidance and self.do_spatio_temporal_guidance
                     else latents
                 )
                 latent_model_input = self.scheduler.scale_model_input(
@@ -1002,10 +1019,17 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                     ]
 
                 # perform guidance
-                if self.do_classifier_free_guidance:
+                if self.do_classifier_free_guidance and not self.do_spatio_temporal_guidance:
                     noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
                     noise_pred = noise_pred_uncond + self.guidance_scale * (
                         noise_pred_text - noise_pred_uncond
+                    )
+                elif self.do_classifier_free_guidance and self.do_spatio_temporal_guidance:
+                    noise_pred_uncond, noise_pred_text, noise_pred_perturb = noise_pred.chunk(3)
+                    noise_pred = noise_pred_uncond + self.guidance_scale * (
+                        noise_pred_text - noise_pred_uncond
+                    ) + self.stg_scale * (
+                        noise_pred_text - noise_pred_perturb
                     )
 
                 if self.do_classifier_free_guidance and self.guidance_rescale > 0.0:

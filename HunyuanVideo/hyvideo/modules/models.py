@@ -344,6 +344,16 @@ class MMSingleStreamBlock(nn.Module):
         assert (
             cu_seqlens_q.shape[0] == 2 * x.shape[0] + 1
         ), f"cu_seqlens_q.shape:{cu_seqlens_q.shape}, x.shape[0]:{x.shape[0]}"
+        
+        if q.shape[0] == 3:
+            print(f"STG Mode Detected!")
+            print(f"q.shape: {q.shape}, k.shape: {k.shape}, v.shape: {v.shape}")
+            print(f"cu_seqlens_q.shape: {cu_seqlens_q.shape}, cu_seqlens_kv.shape: {cu_seqlens_kv.shape}")
+            q = torch.cat(q[:2], dim=0)
+            k = torch.cat(k[:2], dim=0)
+            v = torch.cat(v[:2], dim=0)
+            assert 0
+            
         attn = attention(
             q,
             k,
