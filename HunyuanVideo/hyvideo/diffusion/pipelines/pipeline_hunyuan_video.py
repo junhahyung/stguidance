@@ -647,6 +647,11 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         return self._guidance_scale > 1
 
     @property
+    def do_spatio_temporal_guidance(self):
+        # return self._guidance_scale > 1 and self.transformer.config.time_cond_proj_dim is None
+        return self._stg_scale > 0
+
+    @property
     def cross_attention_kwargs(self):
         return self._cross_attention_kwargs
 
@@ -698,6 +703,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         enable_tiling: bool = False,
         n_tokens: Optional[int] = None,
         embedded_guidance_scale: Optional[float] = None,
+        stg_scale: float = 0.0,
         **kwargs,
     ):
         r"""
@@ -825,6 +831,12 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         self._clip_skip = clip_skip
         self._cross_attention_kwargs = cross_attention_kwargs
         self._interrupt = False
+        self._stg_scale = stg_scale
+
+        print(f"cfg scale: {guidance_scale}")
+        print(f"cfg: {self.do_classifier_free_guidance}")
+        print(f"stg scale: {stg_scale}")
+        print(f"stg: {self.do_spatio_temporal_guidance}")
 
         # 2. Define call parameters
         if prompt is not None and isinstance(prompt, str):
