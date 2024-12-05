@@ -10,5 +10,8 @@
 - Update README
 - Update STG with Open-Sora, SVD, and LTX-Video
 
+## Requirements
+Please refer to the [original github](https://github.com/genmoai/mochi?tab=readme-ov-file) for the requirements and setup.
+
 ## Acknowledgements
 The code for the Mochi model is based on [Mochi](https://github.com/genmoai/mochi?tab=readme-ov-file).
