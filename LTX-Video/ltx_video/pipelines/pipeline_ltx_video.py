@@ -1236,9 +1236,9 @@ class LTXVideoPipeline(DiffusionPipeline):
         do_spatio_temporal_guidance = stg_scale > 0.0
         if do_spatio_temporal_guidance:
             layers = self.extract_layers()
-            if stg_mode == "residual":
+            if stg_mode == "stg-r":
                 replace_processor = STGResidualProcessor()
-            elif stg_mode == "attention":
+            elif stg_mode == "stg-a":
                 replace_processor = STGAttentionProcessor()
             else:
                 assert False, "Invalid stg mode"

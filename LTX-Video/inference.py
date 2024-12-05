@@ -142,8 +142,20 @@ def get_unique_filename(
     dir: Path,
     endswith=None,
     index_range=1000,
+    stg_mode: str = "stg-a",
+    stg_scale: float = 1.0,
+    stg_block_idx: list = [20],
+    do_rescaling: bool = True,
 ) -> Path:
-    base_filename = f"{base}_{convert_prompt_to_filename(prompt, max_len=30)}_{seed}_{resolution[0]}x{resolution[1]}x{resolution[2]}"
+    mode = "CFG" if stg_scale == 0 else stg_mode.upper()
+    if mode == "CFG":
+        suffix = f"{mode}"
+    else:
+        suffix = f"{mode}_{stg_scale}_{stg_block_idx}"
+    if do_rescaling:
+        suffix = f"{suffix}_rescaled"
+
+    base_filename = f"{base}_{convert_prompt_to_filename(prompt, max_len=30)}_{seed}_{resolution[0]}x{resolution[1]}x{resolution[2]}_{suffix}"
     for i in range(index_range):
         filename = dir / f"{base_filename}_{i}{endswith if endswith else ''}{ext}"
         if not os.path.exists(filename):
@@ -208,7 +220,7 @@ def main():
     parser.add_argument(
         "--stg_mode",
         type=str,
-        default="attention",
+        default="stg-a",
         help="Spatio Temporal Skip Guidance scale for the pipeline",
     )
     parser.add_argument(
@@ -221,7 +233,7 @@ def main():
         "--stg_block_idx",
         type=int,
         nargs="+",
-        default=[40],
+        default=[20],
         help="STG Block index list",
     )
     parser.add_argument(
@@ -239,13 +251,13 @@ def main():
     parser.add_argument(
         "--height",
         type=int,
-        default=480,
+        default=720,
         help="Height of the output video frames. Optional if an input image provided.",
     )
     parser.add_argument(
         "--width",
         type=int,
-        default=704,
+        default=1280,
         help="Width of the output video frames. If None will infer from input image.",
     )
     parser.add_argument(
@@ -381,6 +393,7 @@ def main():
         num_inference_steps=args.num_inference_steps,
         num_images_per_prompt=args.num_images_per_prompt,
         guidance_scale=args.guidance_scale,
+        stg_mode=args.stg_mode,
         stg_scale=args.stg_scale,
         stg_block_idx=args.stg_block_idx,
         do_rescaling=args.do_rescaling,
@@ -443,6 +456,10 @@ def main():
                 seed=args.seed,
                 resolution=(height, width, num_frames),
                 dir=output_dir,
+                stg_mode=args.stg_mode,
+                stg_scale=args.stg_scale,
+                stg_block_idx=args.stg_block_idx,
+                do_rescaling=args.do_rescaling,
             )
 
             # Write video
