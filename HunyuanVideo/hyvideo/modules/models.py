@@ -201,7 +201,6 @@ class MMDoubleStreamBlock(nn.Module):
             q,
             k,
             v,
-            mode="flash",
             cu_seqlens_q=cu_seqlens_q,
             cu_seqlens_kv=cu_seqlens_kv,
             max_seqlen_q=max_seqlen_q,

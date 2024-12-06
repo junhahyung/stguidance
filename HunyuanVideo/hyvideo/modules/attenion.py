@@ -57,7 +57,7 @@ def attention(
     q,
     k,
     v,
-    mode="torch",
+    mode="flash",
     drop_rate=0,
     attn_mask=None,
     causal=False,
