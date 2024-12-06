@@ -102,27 +102,31 @@ def attention(
         
         if do_stg:
             batch_size = q.shape[0]
-            q, q_perturb = torch.cat([q[:batch_size-1]], dim=0), q[batch_size-1:]
-            
+            q, q_perturb = q[:batch_size-1], q[batch_size-1:]
+            k, k_perturb = k[:batch_size-1], k[batch_size-1:]
+            v, v_perturb = v[:batch_size-1], v[batch_size-1:]
+            if attn_mask:
+                attn_mask = attn_mask[:batch_size-1]
+            print(f"q: {q.shape}")
+            print(f"q_perturb: {q_perturb.shape}")
+            print(f"txt_len: {txt_len}")
             x = F.scaled_dot_product_attention(
                 q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
             )
-            print(f"q_perturb: {q_perturb.shape}")
-            print(f"txt_len: {txt_len}")
+            batch_size = q_perturb.shape[0]
             seq_len = q_perturb.shape[2]
+            num_heads = q_perturb.shape[1]
             identity_block_size = seq_len - txt_len
-            full_mask = torch.zeros((seq_len, seq_len), dtype=q_perturb.dtype, device=q_perturb.device)
+            full_mask = torch.zeros((seq_len, seq_len), dtype=q_perturb.dtype, device="cpu")
             full_mask[:identity_block_size, :identity_block_size] = float("-inf")
             full_mask[:identity_block_size, :identity_block_size].fill_diagonal_(0)
             
             full_mask = full_mask.unsqueeze(0).unsqueeze(0)
-            print(f"full_mask: {full_mask.shape}")
+            full_mask = full_mask.expand(batch_size, num_heads, seq_len, seq_len)
+            print(f"full_mask: {full_mask.shape} is_causal: {causal}")
             x_perturb = F.scaled_dot_product_attention(
-                q_perturb, k_perturb, v_perturb, attn_mask=full_mask, dropout_p=drop_rate, is_causal=causal
+                q_perturb, k_perturb, v_perturb, attn_mask=full_mask, dropout_p=drop_rate, is_causal=causal,
             )
-            print(f"x shape: {x.shape}")
-            print(f"x_perturb shape: {x_perturb.shape}")
-            assert 0, "reached here"
 
         x = F.scaled_dot_product_attention(
             q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal

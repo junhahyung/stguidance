@@ -361,8 +361,8 @@ class MMSingleStreamBlock(nn.Module):
                     do_stg=True,
                     txt_len=txt_len,
                 )
-                
-            
+                output = self.linear2(torch.cat((attn, self.mlp_act(mlp)), 2))
+                return x + apply_gate(output, gate=mod_gate)
             elif stg_mode == "STG-R":
                 attn = attention(
                     q,
@@ -677,8 +677,6 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
         if len(self.single_blocks) > 0:
             for i, block in enumerate(self.single_blocks):
                 curr_stg_mode = stg_mode if i == stg_block_idx else None
-                if i == stg_block_idx:
-                    print(f"STG Applied at i={i}")
                 single_block_args = [
                     x,
                     vec,
