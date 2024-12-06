@@ -101,13 +101,8 @@ def attention(
             attn_mask = attn_mask.to(q.dtype)
         
         if do_stg:
-            q_uncond, q_cond, q_perturb = q.chunk(3, dim=0)
-            k_uncond, k_cond, k_perturb = k.chunk(3, dim=0)
-            v_uncond, v_cond, v_perturb = v.chunk(3, dim=0)
-
-            q = torch.cat([q_uncond, q_cond], dim=0)
-            k = torch.cat([k_uncond, k_cond], dim=0)
-            v = torch.cat([v_uncond, v_cond], dim=0)
+            batch_size = q.shape[0]
+            q, q_perturb = torch.cat([q[:batch_size-1]], dim=0), q[batch_size-1:]
             
             x = F.scaled_dot_product_attention(
                 q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
@@ -125,6 +120,8 @@ def attention(
             x_perturb = F.scaled_dot_product_attention(
                 q_perturb, k_perturb, v_perturb, attn_mask=full_mask, dropout_p=drop_rate, is_causal=causal
             )
+            print(f"x shape: {x.shape}")
+            print(f"x_perturb shape: {x_perturb.shape}")
             assert 0, "reached here"
 
         x = F.scaled_dot_product_attention(

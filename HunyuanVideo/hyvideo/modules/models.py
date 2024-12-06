@@ -352,6 +352,7 @@ class MMSingleStreamBlock(nn.Module):
                     q,
                     k,
                     v,
+                    mode="torch",
                     cu_seqlens_q=cu_seqlens_q,
                     cu_seqlens_kv=cu_seqlens_kv,
                     max_seqlen_q=max_seqlen_q,
@@ -360,7 +361,8 @@ class MMSingleStreamBlock(nn.Module):
                     do_stg=True,
                     txt_len=txt_len,
                 )
-                raise NotImplementedError
+                
+            
             elif stg_mode == "STG-R":
                 attn = attention(
                     q,
@@ -375,7 +377,8 @@ class MMSingleStreamBlock(nn.Module):
                 # Compute activation in mlp stream, cat again and run second linear layer.
                 output = self.linear2(torch.cat((attn, self.mlp_act(mlp)), 2))
                 output = apply_gate(output, gate=mod_gate)
-                output[2, :, :] = 0
+                batch_size = output.shape[0]
+                output[:batch_size-1, :, :] = 0
                 return x + output
         else:
             attn = attention(

@@ -923,6 +923,13 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                     [negative_prompt_mask_2, prompt_mask_2, prompt_mask_2]
                 )
         elif self.do_spatio_temporal_guidance:
+            prompt_embeds = torch.cat([prompt_embeds, prompt_embeds])
+            if prompt_mask is not None:
+                prompt_mask = torch.cat([prompt_mask, prompt_mask])
+            if prompt_embeds_2 is not None:
+                prompt_embeds_2 = torch.cat([prompt_embeds_2, prompt_embeds_2])
+            if prompt_mask_2 is not None:
+                prompt_mask_2 = torch.cat([prompt_mask_2, prompt_mask_2])
             
 
         # 4. Prepare timesteps
@@ -990,6 +997,8 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                     if self.do_classifier_free_guidance and not self.do_spatio_temporal_guidance
                     else torch.cat([latents] * 3)
                     if self.do_classifier_free_guidance and self.do_spatio_temporal_guidance
+                    else torch.cat([latents] * 2)
+                    if self.do_spatio_temporal_guidance
                     else latents
                 )
                 latent_model_input = self.scheduler.scale_model_input(
@@ -1035,10 +1044,16 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                         noise_pred_text - noise_pred_uncond
                     )
                 elif self.do_classifier_free_guidance and self.do_spatio_temporal_guidance:
+                    raise NotImplementedError
                     noise_pred_uncond, noise_pred_text, noise_pred_perturb = noise_pred.chunk(3)
                     noise_pred = noise_pred_uncond + self.guidance_scale * (
                         noise_pred_text - noise_pred_uncond
                     ) + self._stg_scale * (
+                        noise_pred_text - noise_pred_perturb
+                    )
+                elif self.do_spatio_temporal_guidance:
+                    noise_pred_text, noise_pred_perturb = noise_pred.chunk(2)
+                    noise_pred = noise_pred_text + self._stg_scale * (
                         noise_pred_text - noise_pred_perturb
                     )
 
