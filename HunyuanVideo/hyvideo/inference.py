@@ -479,7 +479,7 @@ class HunyuanVideoSampler(Inference):
             negative_prompt = self.default_negative_prompt
         if not isinstance(negative_prompt, str):
             raise TypeError(
-                f"`negative_prompt` must be a string, but got {type(negative_prompt)}"
+                f"`negative_prompt` must be a stringbut got {type(negative_prompt)}"
             )
         negative_prompt = [negative_prompt.strip()]
 
