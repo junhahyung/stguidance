@@ -201,6 +201,7 @@ class MMDoubleStreamBlock(nn.Module):
             q,
             k,
             v,
+            mode="flash",
             cu_seqlens_q=cu_seqlens_q,
             cu_seqlens_kv=cu_seqlens_kv,
             max_seqlen_q=max_seqlen_q,
@@ -254,7 +255,6 @@ class MMSingleStreamBlock(nn.Module):
         qk_scale: float = None,
         dtype: Optional[torch.dtype] = None,
         device: Optional[torch.device] = None,
-        stg_mode: Optional[str] = None,
     ):
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
@@ -266,7 +266,6 @@ class MMSingleStreamBlock(nn.Module):
         mlp_hidden_dim = int(hidden_size * mlp_width_ratio)
         self.mlp_hidden_dim = mlp_hidden_dim
         self.scale = qk_scale or head_dim ** -0.5
-        self.stg_mode = stg_mode
 
         # qkv and mlp_in
         self.linear1 = nn.Linear(
@@ -317,6 +316,7 @@ class MMSingleStreamBlock(nn.Module):
         max_seqlen_q: Optional[int] = None,
         max_seqlen_kv: Optional[int] = None,
         freqs_cis: Tuple[torch.Tensor, torch.Tensor] = None,
+        stg_mode: Optional[str] = None,
     ) -> torch.Tensor:
         mod_shift, mod_scale, mod_gate = self.modulation(vec).chunk(3, dim=-1)
         x_mod = modulate(self.pre_norm(x), shift=mod_shift, scale=mod_scale)
@@ -329,9 +329,6 @@ class MMSingleStreamBlock(nn.Module):
         # Apply QK-Norm if needed.
         q = self.q_norm(q).to(v)
         k = self.k_norm(k).to(v)
-
-        print(f"<freq> q.shape: {q.shape}")
-        print(f"<freq> txt_len: {txt_len}")
 
         # Apply RoPE if needed.
         if freqs_cis is not None:
@@ -349,12 +346,9 @@ class MMSingleStreamBlock(nn.Module):
         assert (
             cu_seqlens_q.shape[0] == 2 * x.shape[0] + 1
         ), f"cu_seqlens_q.shape:{cu_seqlens_q.shape}, x.shape[0]:{x.shape[0]}"
-        
-        if self.stg_mode is not None:
-            if self.stg_mode == "STG-R":
-                q = torch.cat([q[:2]], dim=0)
-                k = torch.cat([k[:2]], dim=0)
-                v = torch.cat([v[:2]], dim=0)
+
+        if stg_mode is not None:
+            if stg_mode == "STG-A":
                 attn = attention(
                     q,
                     k,
@@ -364,25 +358,41 @@ class MMSingleStreamBlock(nn.Module):
                     max_seqlen_q=max_seqlen_q,
                     max_seqlen_kv=max_seqlen_kv,
                     batch_size=x.shape[0],
-                    stg_mode=self.stg_mode,
+                    do_stg=True,
                     txt_len=txt_len,
                 )
-        assert 0
+                raise NotImplementedError
+            elif stg_mode == "STG-R":
+                attn = attention(
+                    q,
+                    k,
+                    v,
+                    cu_seqlens_q=cu_seqlens_q,
+                    cu_seqlens_kv=cu_seqlens_kv,
+                    max_seqlen_q=max_seqlen_q,
+                    max_seqlen_kv=max_seqlen_kv,
+                    batch_size=x.shape[0],
+                )
+                # Compute activation in mlp stream, cat again and run second linear layer.
+                output = self.linear2(torch.cat((attn, self.mlp_act(mlp)), 2))
+                output = apply_gate(output, gate=mod_gate)
+                output[2, :, :] = 0
+                return x + output
+        else:
+            attn = attention(
+                q,
+                k,
+                v,
+                cu_seqlens_q=cu_seqlens_q,
+                cu_seqlens_kv=cu_seqlens_kv,
+                max_seqlen_q=max_seqlen_q,
+                max_seqlen_kv=max_seqlen_kv,
+                batch_size=x.shape[0],
+            )
 
-        attn = attention(
-            q,
-            k,
-            v,
-            cu_seqlens_q=cu_seqlens_q,
-            cu_seqlens_kv=cu_seqlens_kv,
-            max_seqlen_q=max_seqlen_q,
-            max_seqlen_kv=max_seqlen_kv,
-            batch_size=x.shape[0],
-        )
-
-        # Compute activation in mlp stream, cat again and run second linear layer.
-        output = self.linear2(torch.cat((attn, self.mlp_act(mlp)), 2))
-        return x + apply_gate(output, gate=mod_gate)
+            # Compute activation in mlp stream, cat again and run second linear layer.
+            output = self.linear2(torch.cat((attn, self.mlp_act(mlp)), 2))
+            return x + apply_gate(output, gate=mod_gate)
 
 
 class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
@@ -477,7 +487,6 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
 
         self.text_states_dim = args.text_states_dim
         self.text_states_dim_2 = args.text_states_dim_2
-        self.stg_mode = None
 
         if hidden_size % heads_num != 0:
             raise ValueError(
@@ -559,7 +568,6 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
                     mlp_act_type=mlp_act_type,
                     qk_norm=qk_norm,
                     qk_norm_type=qk_norm_type,
-                    stg_mode=self.stg_mode,
                     **factory_kwargs,
                 )
                 for _ in range(mm_single_blocks_depth)
@@ -596,6 +604,8 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
         freqs_cos: Optional[torch.Tensor] = None,
         freqs_sin: Optional[torch.Tensor] = None,
         guidance: torch.Tensor = None,  # Guidance for modulation, should be cfg_scale x 1000.
+        stg_mode: str = None,
+        stg_block_idx: int = -1,
         return_dict: bool = True,
     ) -> Union[torch.Tensor, Dict[str, torch.Tensor]]:
         out = {}
@@ -663,7 +673,10 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
         # Merge txt and img to pass through single stream blocks.
         x = torch.cat((img, txt), 1)
         if len(self.single_blocks) > 0:
-            for _, block in enumerate(self.single_blocks):
+            for i, block in enumerate(self.single_blocks):
+                curr_stg_mode = stg_mode if i == stg_block_idx else None
+                if i == stg_block_idx:
+                    print(f"STG Applied at i={i}")
                 single_block_args = [
                     x,
                     vec,
@@ -673,6 +686,7 @@ class HYVideoDiffusionTransformer(ModelMixin, ConfigMixin):
                     max_seqlen_q,
                     max_seqlen_kv,
                     (freqs_cos, freqs_sin),
+                    curr_stg_mode,
                 ]
 
                 x = block(*single_block_args)

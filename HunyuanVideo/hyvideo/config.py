@@ -339,7 +339,13 @@ def add_inference_args(parser: argparse.ArgumentParser):
         "--cfg-scale", type=float, default=1.0, help="Classifier free guidance scale."
     )
     group.add_argument(
-        "--stg-scale", type=float, default=0.0, help="Classifier free guidance scale."
+        "--stg-scale", type=float, default=0.0,
+    )
+    group.add_argument(
+        "--stg-mode", type=str, default=None,
+    )
+    group.add_argument(
+        "--stg-block-idx", type=int, default=None,
     )
     group.add_argument(
         "--embedded-cfg-scale",

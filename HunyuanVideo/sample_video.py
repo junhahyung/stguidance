@@ -42,6 +42,8 @@ def main():
         flow_shift=args.flow_shift,
         batch_size=args.batch_size,
         embedded_guidance_scale=args.embedded_cfg_scale,
+        stg_mode=args.stg_mode,
+        stg_block_idx=args.stg_block_idx,
         stg_scale=args.stg_scale,
     )
     samples = outputs['samples']

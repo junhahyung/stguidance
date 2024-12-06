@@ -704,6 +704,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         n_tokens: Optional[int] = None,
         embedded_guidance_scale: Optional[float] = None,
         stg_mode: Optional[str] = None,
+        stg_block_idx: Optional[int] = -1,
         stg_scale: float = 0.0,
         **kwargs,
     ):
@@ -833,12 +834,6 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         self._cross_attention_kwargs = cross_attention_kwargs
         self._interrupt = False
         self._stg_scale = stg_scale
-
-        if self.do_spatio_temporal_guidance:
-            self.transformer.stg_mode = stg_mode
-        else:
-            self.transformer.stg_mode = None
-
         # 2. Define call parameters
         if prompt is not None and isinstance(prompt, str):
             batch_size = 1
@@ -927,8 +922,6 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                 prompt_mask_2 = torch.cat(
                     [negative_prompt_mask_2, prompt_mask_2, prompt_mask_2]
                 )
-        else:
-            raise NotImplementedError
 
         # 4. Prepare timesteps
         extra_set_timesteps_kwargs = self.prepare_extra_func_kwargs(
@@ -1026,6 +1019,8 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                         freqs_cos=freqs_cis[0],  # [seqlen, head_dim]
                         freqs_sin=freqs_cis[1],  # [seqlen, head_dim]
                         guidance=guidance_expand,
+                        stg_block_idx=stg_block_idx,
+                        stg_mode=stg_mode,
                         return_dict=True,
                     )[
                         "x"
@@ -1041,7 +1036,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                     noise_pred_uncond, noise_pred_text, noise_pred_perturb = noise_pred.chunk(3)
                     noise_pred = noise_pred_uncond + self.guidance_scale * (
                         noise_pred_text - noise_pred_uncond
-                    ) + self.stg_scale * (
+                    ) + self._stg_scale * (
                         noise_pred_text - noise_pred_perturb
                     )
 

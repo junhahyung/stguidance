@@ -96,8 +96,6 @@ def attention(
     k = pre_attn_layout(k)
     v = pre_attn_layout(v)
 
-    assert mode == "torch", "only torch attn supported when using STG"
-
     if mode == "torch":
         if attn_mask is not None and attn_mask.dtype != torch.bool:
             attn_mask = attn_mask.to(q.dtype)
@@ -116,7 +114,7 @@ def attention(
             )
             print(f"q_perturb: {q_perturb.shape}")
             print(f"txt_len: {txt_len}")
-            seq_len = q_perturb.shape[1]
+            seq_len = q_perturb.shape[2]
             identity_block_size = seq_len - txt_len
             full_mask = torch.zeros((seq_len, seq_len), dtype=q_perturb.dtype, device=q_perturb.device)
             full_mask[:identity_block_size, :identity_block_size] = float("-inf")
