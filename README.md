@@ -8,7 +8,7 @@
 
 ## Todos
 - Update README
-- Update STG with Open-Sora, SVD, and LTX-Video
+- Update STG with HunyuanVideo, CogVideoX, Open-Sora, SVD
 
 ## Acknowledgements
 This project is built upon the following works:
