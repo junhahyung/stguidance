@@ -922,6 +922,8 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                 prompt_mask_2 = torch.cat(
                     [negative_prompt_mask_2, prompt_mask_2, prompt_mask_2]
                 )
+        elif self.do_spatio_temporal_guidance:
+            
 
         # 4. Prepare timesteps
         extra_set_timesteps_kwargs = self.prepare_extra_func_kwargs(
