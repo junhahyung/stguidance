@@ -17,9 +17,9 @@ def main():
         raise ValueError(f"`models_root` not exists: {models_root_path}")
     
     # Create save folder to save the samples
-    save_path = args.save_path if args.save_path_suffix=="" else f'{args.save_path}_{args.save_path_suffix}'
-    if not os.path.exists(args.save_path):
-        os.makedirs(save_path, exist_ok=True)
+    save_dir = args.save_path if args.save_path_suffix=="" else f'{args.save_path}_{args.save_path_suffix}'
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir, exist_ok=True)
 
     # Load models
     hunyuan_video_sampler = HunyuanVideoSampler.from_pretrained(models_root_path, args=args)
@@ -29,7 +29,7 @@ def main():
 
     # Start sampling
     # TODO: batch inference check
-    prompts_path = args.prompts_path
+    prompts_path = args.prompt_path
     prompts = []
     if prompts_path is not None:
         assert args.prompt is None, "Cannot specify both `prompt` and `prompts_path`"
@@ -38,6 +38,15 @@ def main():
         prompts = [p.strip() for p in prompts]
         
         for prompt in prompts:
+            save_path = f"{save_dir}/{prompt[:100].replace('/','')}_seed{args.seed}"
+            os.makedirs(save_path, exist_ok=True)
+            if args.stg_mode:
+                save_path = f"{save_path}/{args.stg_mode}_block_{args.stg_block_idx}_scale_{args.stg_scale}.mp4"
+            else:
+                save_path = f"{save_path}/NoSTG.mp4"
+            if os.path.exists(save_path):
+                print(f"Video Already Exists")
+                continue
             outputs = hunyuan_video_sampler.predict(
                 prompt=prompt, 
                 height=args.video_size[0],
@@ -56,13 +65,6 @@ def main():
                 stg_scale=args.stg_scale,
             )
             samples = outputs['samples']
-            
-            save_path = f"{save_path}/{outputs['prompts'][i][:100].replace('/','')}_seed{outputs['seeds'][i]}"
-            os.makedirs(save_path, exist_ok=True)
-            if args.stg_mode:
-                save_path = f"{save_path}/{args.stg_mode}_block_{args.stg_block_idx}_scale_{args.stg_scale}.mp4"
-            else:
-                save_path = f"{save_path}/NoSTG.mp4"
             
             # Save samples
             for i, sample in enumerate(samples):

@@ -516,7 +516,10 @@ class HunyuanVideoSampler(Inference):
                 guidance_scale: {guidance_scale}
                       n_tokens: {n_tokens}
                     flow_shift: {flow_shift}
-       embedded_guidance_scale: {embedded_guidance_scale}"""
+       embedded_guidance_scale: {embedded_guidance_scale}
+                      stg_mode: {stg_mode}
+                 stg_block_idx: {stg_block_idx}
+                     stg_scale: {stg_scale}"""
         logger.debug(debug_str)
 
         # ========================================================================

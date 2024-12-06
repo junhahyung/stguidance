@@ -320,6 +320,12 @@ def add_inference_args(parser: argparse.ArgumentParser):
         help="Prompt for sampling during evaluation.",
     )
     group.add_argument(
+        "--prompt-path",
+        type=str,
+        default=None,
+        help="Prompts path",
+    )
+    group.add_argument(
         "--seed-type",
         type=str,
         default="auto",
