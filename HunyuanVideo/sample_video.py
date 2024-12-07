@@ -18,6 +18,10 @@ def main():
     
     # Create save folder to save the samples
     save_dir = args.save_path if args.save_path_suffix=="" else f'{args.save_path}_{args.save_path_suffix}'
+    if args.prompt_path:
+        save_dir = "./experiment"
+    else:
+        save_dir = "./results"
     if not os.path.exists(save_dir):
         os.makedirs(save_dir, exist_ok=True)
 
@@ -96,7 +100,7 @@ def main():
         for i, sample in enumerate(samples):
             sample = samples[i].unsqueeze(0)
             time_flag = datetime.fromtimestamp(time.time()).strftime("%Y-%m-%d-%H:%M:%S")
-            save_path = f"{save_path}/{time_flag}_seed{outputs['seeds'][i]}_{outputs['prompts'][i][:100].replace('/','')}.mp4"
+            save_path = f"{save_dir}/{time_flag}_seed{outputs['seeds'][i]}_{outputs['prompts'][i][:100].replace('/','')}.mp4"
             save_videos_grid(sample, save_path, fps=24)
             logger.info(f'Sample save to: {save_path}')
 
