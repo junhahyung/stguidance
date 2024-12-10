@@ -1,5 +1,5 @@
 # ----------- Mode Options -----------
-mode = "STG-A"  # Choose from ["CFG", "STG-A", "STG-R"]
+mode = "CFG"  # Choose from ["CFG", "STG-A", "STG-R"]
 
 # ----------- STG Options -----------
 stg_block_idx = [35]  # List of block indices e.g., [35]

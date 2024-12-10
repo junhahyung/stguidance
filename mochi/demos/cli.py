@@ -292,7 +292,7 @@ def generate_cli():
                         video_path = modify_video_path(video_path, rescaling_scale)
                 #------------------------------------#
 
-                if os.path.exists(video_path) and not figure_mode:
+                if os.path.exists(video_path):
                     print(f"[INFO] Skipping {video_path}...")
                     continue
 
