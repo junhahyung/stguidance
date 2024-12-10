@@ -12,3 +12,5 @@ build
 .ruff_cache
 todo/LTX-Video/weights
 todo/LTX-Video/env
+mochi/latents.pt
+*.pt
