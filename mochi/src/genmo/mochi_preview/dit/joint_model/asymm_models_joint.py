@@ -251,13 +251,12 @@ class AsymmetricAttention(nn.Module):
         if self.attention_mode != "flash":
             assert B == 1, f"Non-flash attention only supports batch size 1, got {B}"
 
-        if self.attention_mode == "flash":
+        if do_stg:
+            out = self.STG_sdpa_attention(qkv, N)
+        elif self.attention_mode == "flash":
             out = self.flash_attention(qkv, cu_seqlens, max_seqlen_in_batch, total, local_dim)
         elif self.attention_mode == "sdpa":
-            if do_stg:
-                out = self.STG_sdpa_attention(qkv, N)
-            else:
-                out = self.sdpa_attention(qkv)
+            out = self.sdpa_attention(qkv)
         elif self.attention_mode == "sage":
             out = self.sage_attention(qkv)
         elif self.attention_mode == "comfy":
