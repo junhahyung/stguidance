@@ -24,6 +24,10 @@ MEMORY_LAYOUT = {
         lambda x: x.transpose(1, 2),
         lambda x: x.transpose(1, 2),
     ),
+    "naive": (
+        lambda x: x.transpose(1, 2),
+        lambda x: x.transpose(1, 2),
+    ),
 }
 
 
@@ -107,23 +111,29 @@ def attention(
             v, v_perturb = v[:batch_size-1], v[batch_size-1:]
             if attn_mask:
                 attn_mask = attn_mask[:batch_size-1]
-            print(f"q: {q.shape}")
-            print(f"q_perturb: {q_perturb.shape}")
-            print(f"txt_len: {txt_len}")
+            seq_len = q.shape[2]
+            attn_mask = torch.zeros((seq_len, seq_len), dtype=q_perturb.dtype, device="cuda")
             x = F.scaled_dot_product_attention(
                 q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
             )
             batch_size = q_perturb.shape[0]
             seq_len = q_perturb.shape[2]
             num_heads = q_perturb.shape[1]
-            identity_block_size = seq_len - txt_len
-            full_mask = torch.zeros((seq_len, seq_len), dtype=q_perturb.dtype, device="cpu")
-            full_mask[:identity_block_size, :identity_block_size] = float("-inf")
-            full_mask[:identity_block_size, :identity_block_size].fill_diagonal_(0)
+            identity_block_size = txt_len
             
-            full_mask = full_mask.unsqueeze(0).unsqueeze(0)
+            mask_start = seq_len - txt_len
+            mask_indices = torch.arange(mask_start, seq_len, device="cuda")
+            full_mask = torch.zeros((seq_len, seq_len), dtype=q_perturb.dtype, device="cuda")
+
+            # txt_len 부분만 마스킹 적용
+            full_mask[mask_indices[:, None], mask_indices] = float("-inf")
+            full_mask[mask_indices, mask_indices] = 0  # 대각선 값 초기화
+
+            # 필요한 부분만 확장
+            full_mask = full_mask.unsqueeze(0).unsqueeze(0)  # (1, 1, seq_len, seq_len)
             full_mask = full_mask.expand(batch_size, num_heads, seq_len, seq_len)
-            print(f"full_mask: {full_mask.shape} is_causal: {causal}")
+
+            # 최적화된 마스크를 사용하여 `x_perturb` 계산
             x_perturb = F.scaled_dot_product_attention(
                 q_perturb, k_perturb, v_perturb, attn_mask=full_mask, dropout_p=drop_rate, is_causal=causal,
             )
@@ -175,6 +185,31 @@ def attention(
         attn = attn.softmax(dim=-1)
         attn = torch.dropout(attn, p=drop_rate, train=True)
         x = attn @ v
+    elif mode == "naive":
+        assert do_stg == True
+        batch_size = q.shape[0]
+        q, q_perturb = q[:batch_size-1], q[batch_size-1:]
+        k, k_perturb = k[:batch_size-1], k[batch_size-1:]
+        v, v_perturb = v[:batch_size-1], v[batch_size-1:]
+        if attn_mask:
+            attn_mask = attn_mask[:batch_size-1]
+        attn_scores = torch.matmul(q, k.transpose(-2, -1))
+        x = F.scaled_dot_product_attention(
+            q, k, v, attn_mask=attn_mask, dropout_p=drop_rate, is_causal=causal
+        )
+        batch_size = q_perturb.shape[0]
+        seq_len = q_perturb.shape[2]
+        num_heads = q_perturb.shape[1]
+        identity_block_size = seq_len - txt_seq_len
+        attn_scores_perturb = torch.matmul(q_perturb, k_perturb.transpose(-2, -1))
+        d_k = q.size(-1)
+        attn_scores_perturb = attn_scores_perturb / (d_k ** 0.5)
+        attn_scores_perturb = attn_scores_perturb / torch.sqrt(torch.tensor(q.shape[-1], dtype=attn_scores_perturb.dtype, device=attn_scores_perturb.device))
+        attn_weights = F.softmax(attn_scores_perturb, dim=-1)
+        print(f"attn_weights shape: {attn_weights.shape}")
+        print(f"v_perturb shape: {v_perturb.shape}")
+        x_perturb = torch.matmul(attn_weights, v_perturb)
+        x = torch.cat([x, x_perturb], dim=0)
     else:
         raise NotImplementedError(f"Unsupported attention mode: {mode}")
 

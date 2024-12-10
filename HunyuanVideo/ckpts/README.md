@@ -3,7 +3,6 @@ pipeline_tag: text-to-video
 license: other
 license_name: tencent-hunyuan-community
 license_link: LICENSE
-downloads: true
 ---
 
 <!-- ## **HunyuanVideo** -->
@@ -18,7 +17,7 @@ downloads: true
 
 This repo contains PyTorch model definitions, pre-trained weights and inference/sampling code for our paper exploring HunyuanVideo. You can find more visualizations on our [project page](https://aivideo.hunyuan.tencent.com).
 
-> [**HunyuanVideo: A Systematic Framework For Large Video Generation Model Training**](https://github.com/Tencent/HunyuanVideo/blob/main/assets/hunyuanvideo.pdf) <br>
+> [**HunyuanVideo: A Systematic Framework For Large Video Generation Model Training**](https://arxiv.org/abs/2412.03603) <br>
 
 ## 🔥🔥🔥 News!!
 * Dec 3, 2024: 🤗 We release the inference code and model weights of HunyuanVideo.
@@ -147,15 +146,13 @@ To evaluate the performance of HunyuanVideo, we selected five strong baselines f
 
 The following table shows the requirements for running HunyuanVideo model (batch size = 1) to generate videos:
 
-|     Model      | GPU  | Setting<br/>(height/width/frame) | Denoising step | GPU Peak Memory  |
-|:--------------:|:----:|:--------------------------------:|:--------------:|:----------------:|
-| HunyuanVideo   | H800 |         720px1280px129f          |       30       |       60G        |
-| HunyuanVideo   | H800 |          544px960px129f          |       30       |       45G        |
-| HunyuanVideo   | H20  |         720px1280px129f          |       30       |       60G        |
-| HunyuanVideo   | H20  |          544px960px129f          |       30       |       45G        |
+|     Model    |  Setting<br/>(height/width/frame) | GPU Peak Memory  |
+|:------------:|:--------------------------------:|:----------------:|
+| HunyuanVideo   |        720px1280px129f          |       60GB        |
+| HunyuanVideo   |        544px960px129f           |       45GB        |
 
 * An NVIDIA GPU with CUDA support is required. 
-  * We have tested on a single H800/H20 GPU.
+  * The model is tested on a single 80G GPU.
   * **Minimum**: The minimum GPU memory required is 60GB for 720px1280px129f and 45G for 544px960px129f.
   * **Recommended**: We recommend using a GPU with 80GB of memory for better generation quality.
 * Tested operating system: Linux
@@ -254,14 +251,14 @@ We list some more useful configurations for easy usage:
 
 
 ## 🔗 BibTeX
-If you find [HunyuanVideo](https://github.com/Tencent/HunyuanVideo/blob/main/assets/hunyuanvideo.pdf) useful for your research and applications, please cite using this BibTeX:
+If you find [HunyuanVideo](https://arxiv.org/abs/2412.03603) useful for your research and applications, please cite using this BibTeX:
 
 ```BibTeX
 @misc{kong2024hunyuanvideo,
       title={HunyuanVideo: A Systematic Framework For Large Video Generative Models}, 
       author={Weijie Kong, Qi Tian, Zijian Zhang, Rox Min, Zuozhuo Dai, Jin Zhou, Jiangfeng Xiong, Xin Li, Bo Wu, Jianwei Zhang, Kathrina Wu, Qin Lin, Aladdin Wang, Andong Wang, Changlin Li, Duojun Huang, Fang Yang, Hao Tan, Hongmei Wang, Jacob Song, Jiawang Bai, Jianbing Wu, Jinbao Xue, Joey Wang, Junkun Yuan, Kai Wang, Mengyang Liu, Pengyu Li, Shuai Li, Weiyan Wang, Wenqing Yu, Xinchi Deng, Yang Li, Yanxin Long, Yi Chen, Yutao Cui, Yuanbo Peng, Zhentao Yu, Zhiyu He, Zhiyong Xu, Zixiang Zhou, Yangyu Tao, Qinglin Lu, Songtao Liu, Dax Zhou, Hongfa Wang, Yong Yang, Di Wang, Yuhong Liu, and Jie Jiang, along with Caesar Zhong},
       year={2024},
-      archivePrefix={arXiv},
+      archivePrefix={arXiv preprint arXiv:2412.03603},
       primaryClass={cs.CV}
 }
 ```
