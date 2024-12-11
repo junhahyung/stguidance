@@ -43,41 +43,43 @@ def main():
         
         for prompt in prompts:
             for idx in [0]:
-                args.stg_block_idx = idx
-                save_path = f"{save_dir}/{prompt[:100].replace('/','')}_seed{args.seed}"
-                os.makedirs(save_path, exist_ok=True)
-                if args.stg_mode:
-                    save_path = f"{save_path}/{args.stg_mode}_block_{args.stg_block_idx}_scale_{args.stg_scale}.mp4"
-                else:
-                    save_path = f"{save_path}/NoSTG.mp4"
-                if os.path.exists(save_path):
-                    print(f"Video Already Exists")
-                    continue
-                outputs = hunyuan_video_sampler.predict(
-                    prompt=prompt, 
-                    height=args.video_size[0],
-                    width=args.video_size[1],
-                    video_length=args.video_length,
-                    seed=args.seed,
-                    negative_prompt=args.neg_prompt,
-                    infer_steps=args.infer_steps,
-                    guidance_scale=args.cfg_scale,
-                    num_videos_per_prompt=args.num_videos,
-                    flow_shift=args.flow_shift,
-                    batch_size=args.batch_size,
-                    embedded_guidance_scale=args.embedded_cfg_scale,
-                    stg_mode=args.stg_mode,
-                    stg_block_idx=args.stg_block_idx,
-                    stg_scale=args.stg_scale,
-                )
-                samples = outputs['samples']
-                
-                # Save samples
-                for i, sample in enumerate(samples):
-                    sample = samples[i].unsqueeze(0)
-                    time_flag = datetime.fromtimestamp(time.time()).strftime("%Y-%m-%d-%H:%M:%S")
-                    save_videos_grid(sample, save_path, fps=24)
-                    logger.info(f'Sample save to: {save_path}')
+                for embed_scale in [5.5, 5.6, 5.7, 5.8, 5.9]:
+                    args.embedded_cfg_scale = embed_scale
+                    args.stg_block_idx = idx
+                    save_path = f"{save_dir}/{prompt[:100].replace('/','')}_seed{args.seed}"
+                    os.makedirs(save_path, exist_ok=True)
+                    if args.stg_mode:
+                        save_path = f"{save_path}/{args.stg_mode}_block_{args.stg_block_idx}_scale_{args.stg_scale}_cfg_{args.cfg_scale}_embed_{args.embedded_cfg_scale}.mp4"
+                    else:
+                        save_path = f"{save_path}/NoSTG.mp4"
+                    if os.path.exists(save_path):
+                        print(f"Video Already Exists")
+                        continue
+                    outputs = hunyuan_video_sampler.predict(
+                        prompt=prompt, 
+                        height=args.video_size[0],
+                        width=args.video_size[1],
+                        video_length=args.video_length,
+                        seed=args.seed,
+                        negative_prompt=args.neg_prompt,
+                        infer_steps=args.infer_steps,
+                        guidance_scale=args.cfg_scale,
+                        num_videos_per_prompt=args.num_videos,
+                        flow_shift=args.flow_shift,
+                        batch_size=args.batch_size,
+                        embedded_guidance_scale=args.embedded_cfg_scale,
+                        stg_mode=args.stg_mode,
+                        stg_block_idx=args.stg_block_idx,
+                        stg_scale=args.stg_scale,
+                    )
+                    samples = outputs['samples']
+                    
+                    # Save samples
+                    for i, sample in enumerate(samples):
+                        sample = samples[i].unsqueeze(0)
+                        time_flag = datetime.fromtimestamp(time.time()).strftime("%Y-%m-%d-%H:%M:%S")
+                        save_videos_grid(sample, save_path, fps=24)
+                        logger.info(f'Sample save to: {save_path}')
     else:
         outputs = hunyuan_video_sampler.predict(
             prompt=args.prompt, 

@@ -105,6 +105,7 @@ def attention(
             attn_mask = attn_mask.to(q.dtype)
         
         if do_stg:
+            assert False
             batch_size = q.shape[0]
             q, q_perturb = q[:batch_size-1], q[batch_size-1:]
             k, k_perturb = k[:batch_size-1], k[batch_size-1:]

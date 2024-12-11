@@ -649,7 +649,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
     @property
     def do_spatio_temporal_guidance(self):
         # return self._guidance_scale > 1 and self.transformer.config.time_cond_proj_dim is None
-        return self._stg_scale > 0
+        return self._stg_mode is not None
 
     @property
     def cross_attention_kwargs(self):
@@ -834,6 +834,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
         self._cross_attention_kwargs = cross_attention_kwargs
         self._interrupt = False
         self._stg_scale = stg_scale
+        self._stg_mode = stg_mode
         # 2. Define call parameters
         if prompt is not None and isinstance(prompt, str):
             batch_size = 1
