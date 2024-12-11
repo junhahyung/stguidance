@@ -1,9 +1,9 @@
 # ----------- Mode Options -----------
-mode = "STG-A"  # Choose from ["CFG", "STG-A", "STG-R"]
+mode = "STG-R"  # Choose from ["CFG", "STG-A", "STG-R"]
 
 # ----------- STG Options -----------
 stg_block_idx = [35]  # List of block indices e.g., [35]
-stg_scale = [0.8]  # (e.g., 0.8)
+stg_scale = 1.0  # (e.g., 1.0)
 
 # ----------- Rescaling Options -----------
 do_rescaling = True  

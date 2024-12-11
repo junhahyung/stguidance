@@ -418,19 +418,19 @@ def sample_model(device, dit, conditioning, **args):
             if mode == "CFG":
                 print(f"[INFO] ## CFG Mode")
                 with torch.autocast("cuda", dtype=torch.bfloat16):
-                    out_cond = dit(z, sigma, False, -1, **cond_text)
-                    out_uncond = dit(z, sigma, False, -1, **cond_null)
+                    out_cond = dit(z, sigma, False, [-1], **cond_text)
+                    out_uncond = dit(z, sigma, False, [-1], **cond_null)
             elif mode == "STG-A":
                 print(f"[INFO] ## STG-A Mode")
                 with torch.autocast("cuda", dtype=torch.bfloat16):
-                    out_cond = dit(z, sigma, False, -1, **cond_text)
-                    out_uncond = dit(z, sigma, False, -1, **cond_null)
+                    out_cond = dit(z, sigma, False, [-1], **cond_text)
+                    out_uncond = dit(z, sigma, False, [-1], **cond_null)
                     out_perturb = dit(z, sigma, True, stg_block_idx, **cond_text)
             elif mode == "STG-R":
                 print(f"[INFO] ## STG-R Mode")
                 with torch.autocast("cuda", dtype=torch.bfloat16):
-                    out_cond = dit(z, sigma, False, -1, **cond_text)
-                    out_uncond = dit(z, sigma, False, -1, **cond_null)
+                    out_cond = dit(z, sigma, False, [-1], **cond_text)
+                    out_uncond = dit(z, sigma, False, [-1], **cond_null)
                     out_perturb = dit(z, sigma, True, stg_block_idx, **cond_text)
             else:
                 raise NotImplementedError
@@ -555,6 +555,7 @@ class MochiSingleGPUPipeline:
         decode_type: str = "full",
         decode_args: Optional[Dict[str, Any]] = None,
     ):
+        assert False, "Only Multi-GPU mode is supported"
         self.device = torch.device("cuda:0")
         self.tokenizer = t5_tokenizer()
         t = Timer()
