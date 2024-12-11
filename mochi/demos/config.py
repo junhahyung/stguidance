@@ -21,8 +21,8 @@ cfg_scale = 4.5  # The scale value for the CFG (e.g., 4.5 is a moderate strength
 num_steps = 64  # Number of steps for model inference (e.g., 64 steps)
 
 # ----------- Prompt Options -----------
-prompt = "A librarian reading to children during story time at the library."  # A single prompt for video generation
-prompts_path = ""  # Path to the prompts file (if used instead of a single prompt)
+prompt = "A librarian reading to children during story time at the library."  # A single prompt for video generation / None for no prompt
+prompts_path = None  # Path to the prompts file (if used instead of a single prompt) / None for no prompts file
 
 # ----------- Video Options -----------
 width = 800  

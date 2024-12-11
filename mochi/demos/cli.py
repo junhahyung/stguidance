@@ -266,12 +266,13 @@ def generate_cli():
             video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
             #--------------------------#
         elif mode == "CFG":
+            cfg_dir = os.path.join(mode_dir, f"scale_{cfg_scale}")
             #----------RESTART----------#
             if do_restart:
-                restart_dir = f"{mode_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
+                restart_dir = f"{cfg_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
                 video_dir = restart_dir
             else:
-                video_dir = mode_dir
+                video_dir = cfg_dir
             video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
             if not do_rescaling:
                 os.makedirs(video_dir, exist_ok=True)
