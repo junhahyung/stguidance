@@ -153,6 +153,7 @@ https://github.com/user-attachments/assets/4cd722cd-c6e8-428d-8183-65e5954a930b
    For details on memory efficiency, inference acceleration, and more, refer to the original pages below:
    - [Mochi](https://huggingface.co/genmo/mochi-1-preview)
    - [CogVideoX](https://huggingface.co/docs/diffusers/en/api/pipelines/cogvideox)
+   - [HunyuanVideo](https://huggingface.co/docs/diffusers/main/api/pipelines/hunyuan_video)
 
 ## 🛠️Todos
 - Implement STG on diffusers
