@@ -19,7 +19,7 @@ do_rescaling = True
 #----------------------#
 
 output = pipe(
-    prompt="A massive dragon lands gently in a field of flowers, its scales shimmering in the sunlight, realistic style.",
+    prompt="A wolf howling at the moon, with the moon subtly resembling a giant clock face, realistic style.",
     height=320,
     width=512,
     num_frames=61,
