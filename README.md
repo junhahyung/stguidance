@@ -111,7 +111,49 @@ https://github.com/user-attachments/assets/4cd722cd-c6e8-428d-8183-65e5954a930b
    - **stg_scale**: Recommended values are ≤2.0.
    - **stg_block_idx**: Specify the block index for applying STG.
    - **do_rescaling**: Set to True to enable rescaling.
-  
+     
+4. 🧪**Diffusers**
+   
+   The [Diffusers implementation](https://github.com/junhahyung/STGuidance/tree/main/diffusers) supports **Mochi** and **CogVideoX** as of now
+   
+   To run the test script, refer to the `test.py` file in each folder. Below is an example using Mochi:
+   
+   ```python
+   # test.py
+   import torch
+   from pipeline_stg_mochi import MochiSTGPipeline
+   from diffusers.utils import export_to_video
+   import os
+   
+   # Load the pipeline
+   pipe = MochiSTGPipeline.from_pretrained("genmo/mochi-1-preview", variant="bf16", torch_dtype=torch.bfloat16)
+   
+   pipe.enable_vae_tiling()
+   pipe = pipe.to("cuda")
+   
+   #--------Option--------#
+   prompt = "A slow-motion capture of a beautiful woman in a flowing dress spinning in a field of sunflowers, with petals swirling around her, realistic style."
+   stg_mode = "STG-R" 
+   stg_applied_layers_idx = [35]
+   stg_scale = 0.8 # 0.0 for CFG (default)
+   do_rescaling = True # False (default)
+   #----------------------#
+   
+   # Generate video frames
+   frames = pipe(
+       prompt, 
+       num_frames=84,
+       stg_mode=stg_mode,
+       stg_applied_layers_idx=stg_applied_layers_idx,
+       stg_scale=stg_scale,
+       do_rescaling=do_rescaling
+   ).frames[0]
+   ...
+   ```
+   For details on memory efficiency, inference acceleration, and more, refer to the original pages below:
+   - [Mochi](https://huggingface.co/genmo/mochi-1-preview)
+   - [CogVideoX](https://huggingface.co/docs/diffusers/en/api/pipelines/cogvideox)
+
 ## 🛠️Todos
 - Implement STG on diffusers
 - Update STG with Open-Sora, SVD
