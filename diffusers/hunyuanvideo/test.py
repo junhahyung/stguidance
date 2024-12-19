@@ -28,5 +28,6 @@ output = pipe(
     stg_applied_layers_idx=stg_applied_layers_idx,
     stg_scale=stg_scale,
     do_rescaling=do_rescaling,
+    generator=torch.Generator(device="cuda").manual_seed(42),
 ).frames[0]
 export_to_video(output, "output.mp4", fps=15)
