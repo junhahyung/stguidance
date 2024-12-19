@@ -121,4 +121,5 @@ This project is built upon the following works:
 - [Mochi](https://github.com/genmoai/mochi?tab=readme-ov-file)
 - [HunyuanVideo](https://github.com/Tencent/HunyuanVideo)
 - [LTX-Video](https://github.com/Lightricks/LTX-Video)
+- [diffusers](https://github.com/huggingface/diffusers)
 
