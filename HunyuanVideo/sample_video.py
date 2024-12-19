@@ -43,9 +43,9 @@ def main():
         
         for prompt in prompts:
             for idx in [0]:
-                for embed_scale in [5.5, 5.6, 5.7, 5.8, 5.9]:
-                    args.embedded_cfg_scale = embed_scale
+                for stg_scale in [10.0]:
                     args.stg_block_idx = idx
+                    args.stg_scale = stg_scale
                     save_path = f"{save_dir}/{prompt[:100].replace('/','')}_seed{args.seed}"
                     os.makedirs(save_path, exist_ok=True)
                     if args.stg_mode:

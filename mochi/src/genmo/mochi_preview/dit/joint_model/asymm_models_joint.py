@@ -644,7 +644,7 @@ class AsymmDiTJoint(nn.Module):
         x: torch.Tensor,
         sigma: torch.Tensor,
         is_perturbed: bool,
-        stg_block_idx: int,
+        stg_block_idx: List[int],
         y_feat: List[torch.Tensor],
         y_mask: List[torch.Tensor],
         packed_indices: Dict[str, torch.Tensor] = None,
@@ -682,19 +682,25 @@ class AsymmDiTJoint(nn.Module):
             rope_sin = rope_sin.narrow(1, cp_rank * local_heads, local_heads)
 
         if is_perturbed:
-            if isinstance(stg_block_idx, int):
-                stg_block_idx = stg_block_idx
-                perturb_mode = "STG-A"
+            if isinstance(stg_block_idx, list):
+                # 첫 번째 요소를 기준으로 perturb_mode 설정
+                first_item = stg_block_idx[0]
+                if isinstance(first_item, int):
+                    perturb_mode = "STG-A"
+                elif "residual" in first_item:
+                    perturb_mode = "STG-R"
+                else:
+                    raise ValueError("Invalid format in stg_block_idx")
+
+                # residual 제거하고 숫자만 모은 리스트 생성
+                stg_block_idx = [int(item.split('_')[-1]) if isinstance(item, str) and "residual" in item else int(item) for item in stg_block_idx]
             else:
-                assert "residual" in stg_block_idx
-                stg_block_idx = int(stg_block_idx.split('_')[-1])
-                perturb_mode = "STG-R"
+                raise TypeError("stg_block_idx must be a list")
         else:
             perturb_mode = "None"
         
-
         for i, block in enumerate(self.blocks):
-            if i == stg_block_idx and perturb_mode == "STG-A":
+            if i in stg_block_idx and perturb_mode == "STG-A":
                 print(f"[INFO] STG-A applied in {i}th block")
                 x, y_feat = block(
                     x,
@@ -705,7 +711,7 @@ class AsymmDiTJoint(nn.Module):
                     rope_sin=rope_sin,
                     packed_indices=packed_indices,
                 )  # (B, M, D), (B, L, D)
-            elif i == stg_block_idx and perturb_mode == "STG-R":
+            elif i in stg_block_idx and perturb_mode == "STG-R":
                 print(f"[INFO] STG-R applied in {i}th block")
                 x, y_feat = block(
                     x,

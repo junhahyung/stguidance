@@ -1,9 +1,9 @@
 # ----------- Mode Options -----------
-mode = "CFG"  # Choose from ["CFG", "STG-A", "STG-R"]
+mode = "STG-R"  # Choose from ["CFG", "STG-A", "STG-R"]
 
 # ----------- STG Options -----------
-stg_block_idx = [35]  # List of block indices e.g., [35]
-stg_scale = [0.8]  # (e.g., 0.8)
+stg_block_idx = [34, 35]  # List of block indices e.g., [35]
+stg_scale = 1.0  # (e.g., 1.0)
 
 # ----------- Rescaling Options -----------
 do_rescaling = True  
@@ -21,8 +21,8 @@ cfg_scale = 4.5  # The scale value for the CFG (e.g., 4.5 is a moderate strength
 num_steps = 64  # Number of steps for model inference (e.g., 64 steps)
 
 # ----------- Prompt Options -----------
-prompt = "A librarian reading to children during story time at the library."  # A single prompt for video generation
-prompts_path = ""  # Path to the prompts file (if used instead of a single prompt)
+prompt = None  # A single prompt for video generation / None for no prompt
+prompts_path = "prompts/demo_prompts2.txt"  # Path to the prompts file (if used instead of a single prompt) / None for no prompts file
 
 # ----------- Video Options -----------
 width = 800  

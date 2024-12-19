@@ -923,15 +923,6 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                 prompt_mask_2 = torch.cat(
                     [negative_prompt_mask_2, prompt_mask_2, prompt_mask_2]
                 )
-        elif self.do_spatio_temporal_guidance:
-            prompt_embeds = torch.cat([prompt_embeds, prompt_embeds])
-            if prompt_mask is not None:
-                prompt_mask = torch.cat([prompt_mask, prompt_mask])
-            if prompt_embeds_2 is not None:
-                prompt_embeds_2 = torch.cat([prompt_embeds_2, prompt_embeds_2])
-            if prompt_mask_2 is not None:
-                prompt_mask_2 = torch.cat([prompt_mask_2, prompt_mask_2])
-            
 
         # 4. Prepare timesteps
         extra_set_timesteps_kwargs = self.prepare_extra_func_kwargs(
@@ -998,7 +989,7 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                     if self.do_classifier_free_guidance and not self.do_spatio_temporal_guidance
                     else torch.cat([latents] * 3)
                     if self.do_classifier_free_guidance and self.do_spatio_temporal_guidance
-                    else torch.cat([latents] * 2)
+                    else latents
                     if self.do_spatio_temporal_guidance
                     else latents
                 )
@@ -1031,8 +1022,8 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                         freqs_cos=freqs_cis[0],  # [seqlen, head_dim]
                         freqs_sin=freqs_cis[1],  # [seqlen, head_dim]
                         guidance=guidance_expand,
-                        stg_block_idx=stg_block_idx,
-                        stg_mode=stg_mode,
+                        stg_block_idx=-1,
+                        stg_mode=None,
                         return_dict=True,
                     )[
                         "x"
@@ -1053,9 +1044,26 @@ class HunyuanVideoPipeline(DiffusionPipeline):
                         noise_pred_text - noise_pred_perturb
                     )
                 elif self.do_spatio_temporal_guidance:
-                    noise_pred_text, noise_pred_perturb = noise_pred.chunk(2)
-                    noise_pred = noise_pred_text + self._stg_scale * (
-                        noise_pred_text - noise_pred_perturb
+                    with torch.autocast(
+                        device_type="cuda", dtype=target_dtype, enabled=autocast_enabled
+                    ):
+                        noise_pred_perturb = self.transformer(  # For an input image (129, 192, 336) (1, 256, 256)
+                            latent_model_input,  # [2, 16, 33, 24, 42]
+                            t_expand,  # [2]
+                            text_states=prompt_embeds,  # [2, 256, 4096]
+                            text_mask=prompt_mask,  # [2, 256]
+                            text_states_2=prompt_embeds_2,  # [2, 768]
+                            freqs_cos=freqs_cis[0],  # [seqlen, head_dim]
+                            freqs_sin=freqs_cis[1],  # [seqlen, head_dim]
+                            guidance=guidance_expand,
+                            stg_block_idx=stg_block_idx,
+                            stg_mode=stg_mode,
+                            return_dict=True,
+                        )[
+                            "x"
+                        ]
+                    noise_pred = noise_pred_perturb + self._stg_scale * (
+                        noise_pred - noise_pred_perturb
                     )
 
                 if self.do_classifier_free_guidance and self.guidance_rescale > 0.0:

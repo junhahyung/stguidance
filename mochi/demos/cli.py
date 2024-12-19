@@ -34,7 +34,7 @@ def configure_model(model_dir_path_, cpu_offload_):
 
 def load_model():
     os.environ['MASTER_ADDR'] = '127.0.0.1'
-    os.environ['MASTER_PORT'] = "29502"
+    os.environ['MASTER_PORT'] = "29501"
     global num_gpus, pipeline, model_dir_path
     if pipeline is None:
         MOCHI_DIR = model_dir_path
@@ -242,85 +242,90 @@ def generate_cli():
     # Iterate over prompts and generate videos
     for i, prompt in enumerate(prompts):
         sanitized_prompt = sanitize_filename(prompt)  # 파일 이름에 사용할 수 있도록 프롬프트를 변환
-        for scale in stg_scale:
-            for idx in stg_block_idx:
-                if "STG-R" in mode:  # STG-R or perturb_PASS 모드 확인
-                    curr_idx = f"residual_{idx}"
-                else:
-                    curr_idx = idx
+        scale = stg_scale
+        if "STG-R" in mode: 
+            stg_block_idx = [f"residual_{idx}" for idx in stg_block_idx]
 
-                if mode == "STG-A" or mode == "STG-R":
-                    stg_dir = os.path.join(mode_dir, f"idx_{idx}_scale_{scale}")
-                    #----------RESTART----------#
-                    if do_restart:
-                        video_dir = f"{stg_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
-                    else:
-                        video_dir = stg_dir
+        if all(isinstance(item, int) for item in stg_block_idx):
+            stg_block_idx_str = ",".join(map(str, stg_block_idx))
+        elif all(isinstance(item, str) and "residual_" in item for item in stg_block_idx):
+            stg_block_idx_str = ",".join(item.split('_')[-1] for item in stg_block_idx)
+        else:
+            raise ValueError("Invalid format in stg_block_idx")
 
-                    if not do_rescaling:
-                        os.makedirs(video_dir, exist_ok=True)
-                    video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
-                    #--------------------------#
-                elif mode == "CFG":
-                    #----------RESTART----------#
-                    if do_restart:
-                        restart_dir = f"{mode_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
-                        video_dir = restart_dir
-                    else:
-                        video_dir = mode_dir
-                    video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
-                    if not do_rescaling:
-                        os.makedirs(video_dir, exist_ok=True)
-                    #--------------------------#
+        if mode == "STG-A" or mode == "STG-R":
+            stg_dir = os.path.join(mode_dir, f"idx_{stg_block_idx_str}_stg_scale_{scale}_cfg_scale_{cfg_scale}")
+            #----------RESTART----------#
+            if do_restart:
+                video_dir = f"{stg_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
+            else:
+                video_dir = stg_dir
 
-                #-------------Rescaling--------------#
-                def modify_video_path(path, rescaling_scale):
-                    video_dir, video_name = os.path.split(path)
+            if not do_rescaling:
+                os.makedirs(video_dir, exist_ok=True)
+            video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
+            #--------------------------#
+        elif mode == "CFG":
+            cfg_dir = os.path.join(mode_dir, f"scale_{cfg_scale}")
+            #----------RESTART----------#
+            if do_restart:
+                restart_dir = f"{cfg_dir}_restart_idx_{max_idx}-{restart_idx}_N_{num_restarts}_K_{num_intervals}"
+                video_dir = restart_dir
+            else:
+                video_dir = cfg_dir
+            video_path = os.path.join(video_dir, f"{sanitized_prompt}.mp4")
+            if not do_rescaling:
+                os.makedirs(video_dir, exist_ok=True)
+            #--------------------------#
 
-                    parent_dir = os.path.dirname(video_dir)
-                    last_dir = os.path.basename(video_dir)
-                    new_dir = f"{last_dir}_rescaling_{rescaling_scale}"
-                    new_video_dir = os.path.join(parent_dir, new_dir)
-                    os.makedirs(new_video_dir, exist_ok=True)
+        #-------------Rescaling--------------#
+        def modify_video_path(path, rescaling_scale):
+            video_dir, video_name = os.path.split(path)
 
-                    new_video_path = os.path.join(new_video_dir, video_name)
+            parent_dir = os.path.dirname(video_dir)
+            last_dir = os.path.basename(video_dir)
+            new_dir = f"{last_dir}_rescaling_{rescaling_scale}"
+            new_video_dir = os.path.join(parent_dir, new_dir)
+            os.makedirs(new_video_dir, exist_ok=True)
 
-                    return new_video_path
+            new_video_path = os.path.join(new_video_dir, video_name)
 
-                if do_rescaling:
-                    if not "rescale" in video_path:
-                        video_path = modify_video_path(video_path, rescaling_scale)
-                #------------------------------------#
+            return new_video_path
 
-                if os.path.exists(video_path):
-                    print(f"[INFO] Skipping {video_path}...")
-                    continue
+        if do_rescaling:
+            if not "rescale" in video_path:
+                video_path = modify_video_path(video_path, rescaling_scale)
+        #------------------------------------#
 
-                output = generate_video(
-                    prompt,
-                    negative_prompt,
-                    width,
-                    height,
-                    num_frames,
-                    seed,
-                    cfg_scale,
-                    num_steps,
-                    video_path,
-                    curr_idx,
-                    scale,
-                    mode,
-                    #----------RESTART----------#
-                    do_restart,
-                    restart_idx,
-                    num_restarts,
-                    max_idx,
-                    num_intervals,
-                    #---------Rescaling---------#
-                    do_rescaling,
-                    rescaling_scale,
-                    #---------------------------#
-                )
-                click.echo(f"Video generated at: {video_path}")
+        if os.path.exists(video_path):
+            print(f"[INFO] Skipping {video_path}...")
+            continue
+
+        output = generate_video(
+            prompt,
+            negative_prompt,
+            width,
+            height,
+            num_frames,
+            seed,
+            cfg_scale,
+            num_steps,
+            video_path,
+            stg_block_idx,
+            scale,
+            mode,
+            #----------RESTART----------#
+            do_restart,
+            restart_idx,
+            num_restarts,
+            max_idx,
+            num_intervals,
+            #---------Rescaling---------#
+            do_rescaling,
+            rescaling_scale,
+            #---------------------------#
+        )
+        click.echo(f"Video generated at: {video_path}")
 
 
 if __name__ == "__main__":
