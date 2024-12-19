@@ -207,7 +207,7 @@ class STGMochiAttnProcessor2_0:
             full_mask = torch.zeros((full_sequence_length_ptb, full_sequence_length_ptb), device=query_ptb.device, dtype=query_ptb.dtype)
             
             full_mask[:identity_block_size, :identity_block_size] = float("-inf")
-            full_mask[:identity_block_size, identity_block_size:].fill_diagonal_(0)
+            full_mask[:identity_block_size, :identity_block_size].fill_diagonal_(0)
             
             full_mask = full_mask.unsqueeze(0).unsqueeze(0)
 
