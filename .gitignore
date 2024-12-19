@@ -14,3 +14,6 @@ todo/LTX-Video/weights
 todo/LTX-Video/env
 mochi/latents.pt
 *.pt
+README.md
+**/ckpts/
+**/__pycache__/
