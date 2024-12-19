@@ -1,12 +1,12 @@
-# Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling
+# 🚀Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling✨
 
-## Paper
+## 📑Paper
 - Arxiv: [Spatiotemporal Skip Guidance for Enhanced Video Diffusion Sampling](https://arxiv.org/abs/2411.18664)
 
-## Project Page
+## 🌐Project Page
 - [STG Project Page](https://junhahyung.github.io/STGuidance)
 
-## Video Examples
+## 🎥Video Examples
 Below are example videos showcasing the enhanced video quality achieved through STG:
 
 ### HunyuanVideo
@@ -47,18 +47,8 @@ https://github.com/user-attachments/assets/4cd722cd-c6e8-428d-8183-65e5954a930b
 
 
 
-
-## Todos
-- Update README
-- Update STG with HunyuanVideo, CogVideoX, Open-Sora, SVD
-
-## Acknowledgements
-This project is built upon the following works:
-- [Mochi](https://github.com/genmoai/mochi?tab=readme-ov-file)
-- [LTX-Video](https://github.com/Lightricks/LTX-Video)
-
-## Start Guide
-1. **Mochi**
+## 🗺️Start Guide
+1. 🍡**Mochi**
    - For installation and requirements, refer to the [official repository](https://github.com/genmoai/mochi).
      
    - Update `demos/config.py` with your desired settings and simply run:
@@ -66,7 +56,45 @@ This project is built upon the following works:
      python ./demos/cli.py
      ```
 
-2. **LTX-Video**
+2. 🌌**HunyuanVideo**
+   - For installation and requirements, refer to the [official repository](https://github.com/Tencent/HunyuanVideo).
+     
+   **Using CFG (Default Model):**
+   ```bash
+   torchrun --nproc_per_node=4 sample_video.py \
+    --video-size 544 960 \
+    --video-length 65 \
+    --infer-steps 50 \
+    --prompt "A time traveler steps out of a glowing portal into a Victorian-era street filled with horse-drawn carriages, realistic style." \
+    --flow-reverse \
+    --seed 42 \
+    --ulysses-degree 4 \
+    --ring-degree 1 \
+    --save-path ./results
+   ```
+
+   **To utilize STG, use the following command:**
+   ```bash
+   torchrun --nproc_per_node=4 sample_video.py \
+    --video-size 544 960 \
+    --video-length 65 \
+    --infer-steps 50 \
+    --prompt "A time traveler steps out of a glowing portal into a Victorian-era street filled with horse-drawn carriages, realistic style." \
+    --flow-reverse \
+    --seed 42 \
+    --ulysses-degree 4 \
+    --ring-degree 1 \
+    --save-path ./results \
+    --stg-mode "STG-R" \
+    --stg-block-idx 2 \
+    --stg-scale 2.0
+   ```
+   Key Parameters:
+   - **stg_mode**: Only STG-R supported.
+   - **stg_scale**: 2.0 is recommended.
+   - **stg_block_idx**: Specify the block index for applying STG.
+
+3. 🏎️**LTX-Video**
    - For installation and requirements, refer to the [official repository](https://github.com/Lightricks/LTX-Video).
 
    **Using CFG (Default Model):**
@@ -83,3 +111,13 @@ This project is built upon the following works:
    - **stg_scale**: Recommended values are ≤2.0.
    - **stg_block_idx**: Specify the block index for applying STG.
    - **do_rescaling**: Set to True to enable rescaling.
+  
+## 🛠️Todos
+- Update STG with Open-Sora, SVD
+
+## 🙏Acknowledgements
+This project is built upon the following works:
+- [Mochi](https://github.com/genmoai/mochi?tab=readme-ov-file)
+- [HunyuanVideo](https://github.com/Tencent/HunyuanVideo)
+- [LTX-Video](https://github.com/Lightricks/LTX-Video)
+
