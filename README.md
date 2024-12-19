@@ -113,6 +113,7 @@ https://github.com/user-attachments/assets/4cd722cd-c6e8-428d-8183-65e5954a930b
    - **do_rescaling**: Set to True to enable rescaling.
   
 ## 🛠️Todos
+- Implement STG on diffusers
 - Update STG with Open-Sora, SVD
 
 ## 🙏Acknowledgements
