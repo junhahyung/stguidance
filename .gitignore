@@ -17,3 +17,6 @@ mochi/latents.pt
 README.md
 **/ckpts/
 **/__pycache__/
+**/results/
+**/samples/
+**/unet_info.txt
