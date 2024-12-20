@@ -46,6 +46,12 @@ https://github.com/user-attachments/assets/fcb8a078-58a5-4e62-a55e-662a0b08216b
 https://github.com/user-attachments/assets/4cd722cd-c6e8-428d-8183-65e5954a930b
 
 
+### SVD (Stable Video Diffusion)
+
+
+https://github.com/user-attachments/assets/05994a52-1e9f-4b3c-ae20-dfccfc94e3db
+
+
 
 ## 🗺️Start Guide
 1. 🍡**Mochi**
@@ -154,6 +160,7 @@ https://github.com/user-attachments/assets/4cd722cd-c6e8-428d-8183-65e5954a930b
    - [Mochi](https://huggingface.co/genmo/mochi-1-preview)
    - [CogVideoX](https://huggingface.co/docs/diffusers/en/api/pipelines/cogvideox)
    - [HunyuanVideo](https://huggingface.co/docs/diffusers/main/api/pipelines/hunyuan_video)
+   - [StableVideoDiffusion](https://huggingface.co/docs/diffusers/en/using-diffusers/svd)
 
 ## 🛠️Todos
 - Implement STG on diffusers
