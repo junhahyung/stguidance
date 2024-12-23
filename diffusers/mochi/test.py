@@ -30,7 +30,8 @@ frames = pipe(
     stg_mode=stg_mode,
     stg_applied_layers_idx=stg_applied_layers_idx,
     stg_scale=stg_scale,
-    do_rescaling=do_rescaling
+    do_rescaling=do_rescaling,
+    generator = torch.Generator().manual_seed(42),
 ).frames[0]
 
 # Construct the video filename
