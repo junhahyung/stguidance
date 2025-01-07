@@ -120,7 +120,7 @@ https://github.com/user-attachments/assets/05994a52-1e9f-4b3c-ae20-dfccfc94e3db
      
 4. 🧪**Diffusers**
    
-   The [Diffusers implementation](https://github.com/junhahyung/STGuidance/tree/main/diffusers) supports **Mochi**, **HunyuanVideo**,**CogVideoX** and **SVD** as of now
+   The [Diffusers implementation](https://github.com/junhahyung/STGuidance/tree/main/diffusers) supports **Mochi**, **HunyuanVideo**,**CogVideoX**,**SVD** and **LTX-Video** as of now
    
    To run the test script, refer to the `test.py` file in each folder. Below is an example using Mochi:
    
