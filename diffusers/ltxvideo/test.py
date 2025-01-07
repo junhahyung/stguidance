@@ -10,7 +10,7 @@ pipe.to("cuda")
 prompt = "A woman with light skin, wearing a blue jacket and a black hat with a veil, looks down and to her right, then back up as she speaks; she has brown hair styled in an updo, light brown eyebrows, and is wearing a white collared shirt under her jacket; the camera remains stationary on her face as she speaks; the background is out of focus, but shows trees and people in period clothing; the scene is captured in real-life footage."
 negative_prompt = "worst quality, inconsistent motion, blurry, jittery, distorted"
 
-stg_mode = "STG-R" # STG-A, STG-R, CFG
+stg_mode = "STG-R" # STG-A or STG-R
 stg_applied_layers_idx = [19] # 0~27
 stg_scale = 1.0 # 0.0 for CFG
 do_rescaling = True # Default (False)
